@@ -1,0 +1,7 @@
+# install editorconfig
+# install express
+# install eslint
+# install babel
+# insatall webpack
+
+## Editor configurations done
