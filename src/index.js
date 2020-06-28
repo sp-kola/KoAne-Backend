@@ -3,10 +3,15 @@ import constants from '../config/constants';
 import middlewareConfig from '../config/middleware';
 import '../config/database';
 import apiRoutes from './modules';
+import http from 'http';
+import socketio from 'socket.io';
 
 const app = express();
 
 middlewareConfig(app);
+
+const server = http.createServer(app);
+const io = socketio(server);
 
 app.get('/', (req, res) => {
     res.send('Hello world');
@@ -14,7 +19,7 @@ app.get('/', (req, res) => {
 
 apiRoutes(app);
 
-app.listen(constants.PORT, err => {
+server.listen(constants.PORT, err => {
     if (err) {
         throw err;
     } else {
