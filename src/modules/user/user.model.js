@@ -4,15 +4,12 @@ import validator from 'validator';
 import { hashSync, compareSync } from 'bcrypt-nodejs';
 import jwt from 'jsonwebtoken';
 
-import { passwordReg } from './vendor.validations';
+import { passwordReg } from './user.validations';
 import constants from '../../../config/constants';
 
-import Order from '../order/order.model';
-
-const VendorSchema = new Schema({
+const UserSchema = new Schema({
     email: {
         type: String,
-        unique: true,
         required: [true, 'Email is required'],
         trim: true,
         validate: {
@@ -22,27 +19,11 @@ const VendorSchema = new Schema({
             message: '{VALUE} is not a valid email',
         }
     },
-    firstName: {
-        type: String,
-        required: [true, 'First name is required'],
-        trim: true,
-    },
-    lastName: {
-        type: String,
-        required: [true, 'First name is required'],
-        trim: true,
-    },
     userName: {
         type: String,
         required: [true, 'Username is required'],
         trim: true,
-        unique: true,
     },
-    // contactNo: {
-    //     type: Number,
-    //     required: [true, 'contact nummber is required'],
-    //     trim: true,
-    // },
     password: {
         type: String,
         required: [true, 'Password is required'],
@@ -55,15 +36,13 @@ const VendorSchema = new Schema({
             message: '[VALUE] is not a valid password!',
         }
     },
+    type: {
+        type: String,
+        required: true
+    }
 });
 
-VendorSchema.virtual('vendorOrders',{
-    ref: 'Order',
-    localField: '_id',
-    foreignField: 'vendor'
-})
-
-VendorSchema.pre('save', function (next) {
+UserSchema.pre('save', function (next) {
     if (this.isModified('password')) {
         this.password = this._hashPassword(this.password);
         return next();
@@ -71,7 +50,7 @@ VendorSchema.pre('save', function (next) {
     return next();
 });
 
-VendorSchema.methods = {
+UserSchema.methods = {
     _hashPassword(password) {
         return hashSync(password);
     },
@@ -88,11 +67,11 @@ VendorSchema.methods = {
     },
     toJSON() {
         return {
-            _id: this._id,
             userName: this.userName,
-            //token: `JWT ${this.createToken()}`,
+            type: this.type,
+            token: `JWT ${this.createToken()}`,
         };
     },
 };
 
-export default mongoose.model('Vendor', VendorSchema);
+export default mongoose.model('User', UserSchema);

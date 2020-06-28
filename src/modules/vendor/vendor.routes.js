@@ -11,6 +11,6 @@ routes.post('/signup', celebrate({
     [Segments.BODY]: vendorValidation.signup_Schema,
 }), vendorController.signUp);
 
-routes.post('/login', authLocal, vendorController.login);
+//routes.post('/login', authLocal, vendorController.login);
 
 export default routes;

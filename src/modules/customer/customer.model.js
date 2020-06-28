@@ -4,12 +4,12 @@ import validator from 'validator';
 import { hashSync, compareSync } from 'bcrypt-nodejs';
 import jwt from 'jsonwebtoken';
 
-import { passwordReg } from './vendor.validations';
+import { passwordReg } from './customer.validations';
 import constants from '../../../config/constants';
 
-import Order from '../order/order.model';
+import Order from '../order/order.model'
 
-const VendorSchema = new Schema({
+const CustomerSchema = new Schema({
     email: {
         type: String,
         unique: true,
@@ -57,13 +57,13 @@ const VendorSchema = new Schema({
     },
 });
 
-VendorSchema.virtual('vendorOrders',{
+CustomerSchema.virtual('customerOrders',{
     ref: 'Order',
     localField: '_id',
-    foreignField: 'vendor'
+    foreignField: 'customer'
 })
 
-VendorSchema.pre('save', function (next) {
+CustomerSchema.pre('save', function (next) {
     if (this.isModified('password')) {
         this.password = this._hashPassword(this.password);
         return next();
@@ -71,7 +71,7 @@ VendorSchema.pre('save', function (next) {
     return next();
 });
 
-VendorSchema.methods = {
+CustomerSchema.methods = {
     _hashPassword(password) {
         return hashSync(password);
     },
@@ -95,4 +95,4 @@ VendorSchema.methods = {
     },
 };
 
-export default mongoose.model('Vendor', VendorSchema);
+export default mongoose.model('Customer', CustomerSchema);
