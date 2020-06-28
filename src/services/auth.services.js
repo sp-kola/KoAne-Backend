@@ -2,7 +2,7 @@ import passport from 'passport';
 import LocalStrategy from 'passport-local';
 import { Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt';
 
-import User from '../modules/users/user.model';
+import User from '../modules/vendor/vendor.model';
 import constants from '../../config/constants';
 
 

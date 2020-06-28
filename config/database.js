@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import constants from './constants';
 
 //connect the db with the url provide
+
 try {
     mongoose.connect(constants.MONGO_URL,{
         useNewUrlParser: true, 
@@ -11,7 +12,7 @@ try {
     });
 }
 catch (err) {
-    mongoose.createConnection(constants.MONGO_URL);
+     mongoose.createConnection(constants.MONGO_URL);
 }
 
 mongoose.connection
@@ -19,3 +20,4 @@ mongoose.connection
     .on('error', e => {
         throw e;
     });
+

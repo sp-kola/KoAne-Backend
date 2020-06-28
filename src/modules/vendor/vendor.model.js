@@ -4,10 +4,10 @@ import validator from 'validator';
 import { hashSync, compareSync } from 'bcrypt-nodejs';
 import jwt from 'jsonwebtoken';
 
-import { passwordReg } from './user.validations';
+import { passwordReg } from './vendor.validations';
 import constants from '../../../config/constants';
 
-const UserSchema = new Schema({
+const VendorSchema = new Schema({
     email: {
         type: String,
         unique: true,
@@ -55,7 +55,7 @@ const UserSchema = new Schema({
     },
 });
 
-UserSchema.pre('save', function (next) {
+VendorSchema.pre('save', function (next) {
     if (this.isModified('password')) {
         this.password = this._hashPassword(this.password);
         return next();
@@ -63,7 +63,7 @@ UserSchema.pre('save', function (next) {
     return next();
 });
 
-UserSchema.methods = {
+VendorSchema.methods = {
     _hashPassword(password) {
         return hashSync(password);
     },
@@ -87,4 +87,4 @@ UserSchema.methods = {
     },
 };
 
-export default mongoose.model('User', UserSchema);
+export default mongoose.model('Vendor', VendorSchema);
