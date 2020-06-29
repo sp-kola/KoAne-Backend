@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 
 const locationSchema = new mongoose.Schema({
-    vendor: {
-        type: String,
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
-        trim: true
+        trim: true,
+        ref: 'User'
     },
     lattitude:{
         type: Number,
@@ -14,24 +15,6 @@ const locationSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    orders: [{
-        order:{
-            type: String,
-            required: true
-        },
-        orderStatus: {
-            type: Boolean,
-            required: true
-        },
-        lattitude:{
-            type: Number,
-            required: true
-        },
-        longitude: {
-            type: Number,
-            required: true
-        },
-    }]
 
 },{
     timestamps: true

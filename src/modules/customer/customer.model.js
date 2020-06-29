@@ -1,5 +1,5 @@
 /* eslint-disable no-invalid-this */
-import mongoose, { Schema } from 'mongoose';
+const mongoose = require('mongoose');
 import validator from 'validator';
 import { hashSync, compareSync } from 'bcrypt-nodejs';
 import jwt from 'jsonwebtoken';
@@ -9,7 +9,11 @@ import constants from '../../../config/constants';
 
 import Order from '../order/order.model'
 
-const CustomerSchema = new Schema({
+const customerSchema = new mongoose.Schema({
+    userID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },  
     email: {
         type: String,
         unique: true,
@@ -43,27 +47,27 @@ const CustomerSchema = new Schema({
     //     required: [true, 'contact nummber is required'],
     //     trim: true,
     // },
-    password: {
-        type: String,
-        required: [true, 'Password is required'],
-        trim: true,
-        minlength: [6, 'Password need to be longer!'],
-        validate: {
-            validator(password) {
-                return passwordReg.test(password);
-            },
-            message: '[VALUE] is not a valid password!',
-        }
-    },
+    // password: {
+    //     type: String,
+    //     required: [true, 'Password is required'],
+    //     trim: true,
+    //     minlength: [6, 'Password need to be longer!'],
+    //     validate: {
+    //         validator(password) {
+    //             return passwordReg.test(password);
+    //         },
+    //         message: '[VALUE] is not a valid password!',
+    //     }
+    // },
 });
 
-CustomerSchema.virtual('customerOrders',{
+customerSchema.virtual('customerOrders',{
     ref: 'Order',
     localField: '_id',
     foreignField: 'customer'
 })
 
-CustomerSchema.pre('save', function (next) {
+customerSchema.pre('save', function (next) {
     if (this.isModified('password')) {
         this.password = this._hashPassword(this.password);
         return next();
@@ -71,13 +75,13 @@ CustomerSchema.pre('save', function (next) {
     return next();
 });
 
-CustomerSchema.methods = {
+customerSchema.methods = {
     _hashPassword(password) {
         return hashSync(password);
     },
-    authenticateUser(password) {
-        return compareSync(password, this.password);
-    },
+    // authenticateUser(password) {
+    //     return compareSync(password, this.password);
+    // },
     createToken() {
         return jwt.sign(
             {
@@ -95,4 +99,6 @@ CustomerSchema.methods = {
     },
 };
 
-export default mongoose.model('Customer', CustomerSchema);
+const Customer = mongoose.model('Customer',customerSchema); 
+
+export default Customer;

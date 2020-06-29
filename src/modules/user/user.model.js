@@ -1,5 +1,5 @@
 /* eslint-disable no-invalid-this */
-import mongoose, { Schema } from 'mongoose';
+const mongoose = require('mongoose');
 import validator from 'validator';
 import { hashSync, compareSync } from 'bcrypt-nodejs';
 import jwt from 'jsonwebtoken';
@@ -7,9 +7,10 @@ import jwt from 'jsonwebtoken';
 import { passwordReg } from './user.validations';
 import constants from '../../../config/constants';
 
-const UserSchema = new Schema({
+const userSchema = new mongoose.Schema({
     email: {
         type: String,
+        unique: true,
         required: [true, 'Email is required'],
         trim: true,
         validate: {
@@ -42,7 +43,25 @@ const UserSchema = new Schema({
     }
 });
 
-UserSchema.pre('save', function (next) {
+userSchema.virtual('vendors',{
+    ref: 'Vendor',
+    localField: '_id',
+    foreignField: 'userID'
+})
+
+userSchema.virtual('customers',{
+    ref: 'Customer',
+    localField: '_id',
+    foreignField: 'userID'
+})
+
+userSchema.virtual('locations',{
+    ref: 'Location',
+    localField: '_id',
+    foreignField: 'owner'
+})
+
+userSchema.pre('save', function (next) {
     if (this.isModified('password')) {
         this.password = this._hashPassword(this.password);
         return next();
@@ -50,7 +69,7 @@ UserSchema.pre('save', function (next) {
     return next();
 });
 
-UserSchema.methods = {
+userSchema.methods = {
     _hashPassword(password) {
         return hashSync(password);
     },
@@ -74,4 +93,8 @@ UserSchema.methods = {
     },
 };
 
-export default mongoose.model('User', UserSchema);
+const User = mongoose.model('User',userSchema);
+
+export default User;
+
+//export default mongoose.model('User', UserSchema);
