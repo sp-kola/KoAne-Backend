@@ -2,6 +2,7 @@ const Location = require('./location.model')
 const User = require('../user/user.model')
 
 export async function createLocation(req,res){
+    console.log(req.body)
     const location = new Location(req.body)
     try{
         await location.save()

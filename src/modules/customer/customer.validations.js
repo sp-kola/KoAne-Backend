@@ -8,6 +8,7 @@ const signup_Schema = Joi.object({
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
     userName: Joi.string().required(),
+    contactNo: Joi.string().required(),
 });
 
 export default {

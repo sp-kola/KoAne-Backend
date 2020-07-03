@@ -42,11 +42,11 @@ const customerSchema = new mongoose.Schema({
         trim: true,
         unique: true,
     },
-    // contactNo: {
-    //     type: Number,
-    //     required: [true, 'contact nummber is required'],
-    //     trim: true,
-    // },
+    contactNo: {
+        type: Number,
+        required: [true, 'contact nummber is required'],
+        trim: true,
+    },
     // password: {
     //     type: String,
     //     required: [true, 'Password is required'],
@@ -61,7 +61,7 @@ const customerSchema = new mongoose.Schema({
     // },
 });
 
-customerSchema.virtual('customerOrders',{
+customerSchema.virtual('orders',{
     ref: 'Order',
     localField: '_id',
     foreignField: 'customer'

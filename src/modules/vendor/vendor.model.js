@@ -42,11 +42,11 @@ const vendorSchema = new mongoose.Schema({
         trim: true,
         unique: true,
     },
-    // contactNo: {
-    //     type: Number,
-    //     required: [true, 'contact nummber is required'],
-    //     trim: true,
-    // },
+    contactNo: {
+        type: String,
+        required: [true, 'contact number is required'],
+        trim: true,
+    },
     // password: {
     //     type: String,
     //     required: [true, 'Password is required'],

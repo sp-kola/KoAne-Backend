@@ -10,6 +10,7 @@ export default app => {
     app.use('/customer', customerRoutes);
     app.use('/user',userRoutes);
     app.get('/hello', authJwt, (req, res) => {
+        console.log(req)
         res.send('this is a private route');
     });
     app.use('/location',locationRoutes);
