@@ -7,9 +7,6 @@ import userValidation from './user.validations';
 
 const routes = new Router();
 
-routes.post('/signup', celebrate({
-    [Segments.BODY]: userValidation.signup_Schema,
-}), userController.signUp);
 routes.post('/login', authLocal, userController.login);
 
 export default routes;

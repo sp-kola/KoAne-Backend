@@ -4,10 +4,12 @@ import validator from 'validator';
 import { hashSync, compareSync } from 'bcrypt-nodejs';
 import jwt from 'jsonwebtoken';
 
-import { passwordReg } from './user.validations';
+import { passwordReg } from './customer.validations';
 import constants from '../../../config/constants';
 
-const UserSchema = new Schema({
+import Order from '../order/order.model'
+
+const CustomerSchema = new Schema({
     email: {
         type: String,
         unique: true,
@@ -55,7 +57,13 @@ const UserSchema = new Schema({
     },
 });
 
-UserSchema.pre('save', function (next) {
+CustomerSchema.virtual('customerOrders',{
+    ref: 'Order',
+    localField: '_id',
+    foreignField: 'customer'
+})
+
+CustomerSchema.pre('save', function (next) {
     if (this.isModified('password')) {
         this.password = this._hashPassword(this.password);
         return next();
@@ -63,7 +71,7 @@ UserSchema.pre('save', function (next) {
     return next();
 });
 
-UserSchema.methods = {
+CustomerSchema.methods = {
     _hashPassword(password) {
         return hashSync(password);
     },
@@ -82,9 +90,9 @@ UserSchema.methods = {
         return {
             _id: this._id,
             userName: this.userName,
-            token: `JWT ${this.createToken()}`,
+            //token: `JWT ${this.createToken()}`,
         };
     },
 };
 
-export default mongoose.model('User', UserSchema);
+export default mongoose.model('Customer', CustomerSchema);
