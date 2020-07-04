@@ -12,6 +12,7 @@ export default app => {
     app.use('/user',userRoutes);
     app.use('/product',productRoutes);
     app.get('/hello', authJwt, (req, res) => {
+        console.log(req)
         res.send('this is a private route');
     });
     app.use('/location',locationRoutes);

@@ -12,4 +12,6 @@ routes.patch('/update/:id',LocationController.updateLocation);
 
 routes.delete('/delete/:id',LocationController.deleteLocation);
 
+routes.get('/getUser/:id',LocationController.getUserLocation);
+
 export default routes;

@@ -2,15 +2,18 @@ import Vendor from './vendor.model';
 import User from '../user/user.model'
 
 export async function signUp(req, res) {
-    const user = {
-        email : req.body.email,
+    const data = {
+        email: req.body.email,
         password : req.body.password,
         userName: req.body.userName,
         type: 'Vendor'
     }
     try {
-        await User.create(user);
-        const vendor = await Vendor.create(req.body);
+        const user = await User.create(data);
+        const vendor = await Vendor.create({
+            ...req.body,
+            userID : user._id
+        });
         return res.status(201).json(vendor);
     }
     catch (e) {

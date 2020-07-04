@@ -1,5 +1,5 @@
 /* eslint-disable no-invalid-this */
-import mongoose, { Schema } from 'mongoose';
+const mongoose = require('mongoose');
 import validator from 'validator';
 import { hashSync, compareSync } from 'bcrypt-nodejs';
 import jwt from 'jsonwebtoken';
@@ -9,7 +9,11 @@ import constants from '../../../config/constants';
 
 import Order from '../order/order.model';
 
-const VendorSchema = new Schema({
+const vendorSchema = new mongoose.Schema({
+    userID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },  
     email: {
         type: String,
         unique: true,
@@ -38,32 +42,32 @@ const VendorSchema = new Schema({
         trim: true,
         unique: true,
     },
-    // contactNo: {
-    //     type: Number,
-    //     required: [true, 'contact nummber is required'],
-    //     trim: true,
-    // },
-    password: {
+    contactNo: {
         type: String,
-        required: [true, 'Password is required'],
+        required: [true, 'contact number is required'],
         trim: true,
-        minlength: [6, 'Password need to be longer!'],
-        validate: {
-            validator(password) {
-                return passwordReg.test(password);
-            },
-            message: '[VALUE] is not a valid password!',
-        }
     },
+    // password: {
+    //     type: String,
+    //     required: [true, 'Password is required'],
+    //     trim: true,
+    //     minlength: [6, 'Password need to be longer!'],
+    //     validate: {
+    //         validator(password) {
+    //             return passwordReg.test(password);
+    //         },
+    //         message: '[VALUE] is not a valid password!',
+    //     }
+    // },
 });
 
-VendorSchema.virtual('vendorOrders',{
+vendorSchema.virtual('orders',{
     ref: 'Order',
     localField: '_id',
     foreignField: 'vendor'
 })
 
-VendorSchema.pre('save', function (next) {
+vendorSchema.pre('save', function (next) {
     if (this.isModified('password')) {
         this.password = this._hashPassword(this.password);
         return next();
@@ -71,13 +75,13 @@ VendorSchema.pre('save', function (next) {
     return next();
 });
 
-VendorSchema.methods = {
+vendorSchema.methods = {
     _hashPassword(password) {
         return hashSync(password);
     },
-    authenticateUser(password) {
-        return compareSync(password, this.password);
-    },
+    // authenticateUser(password) {
+    //     return compareSync(password, this.password);
+    // },
     createToken() {
         return jwt.sign(
             {
@@ -95,4 +99,6 @@ VendorSchema.methods = {
     },
 };
 
-export default mongoose.model('Vendor', VendorSchema);
+const Vendor = mongoose.model('Vendor',vendorSchema);
+
+export default Vendor;

@@ -2,15 +2,18 @@ import Customer from './customer.model';
 import User from '../user/user.model'
 
 export async function signUp(req, res) {
-    const user = {
-        email : req.body.email,
+    const data = {
+        email: req.body.email,
         password : req.body.password,
         userName: req.body.userName,
         type: 'Customer'
     }
     try {
-        await User.create(user);
-        const customer = await Customer.create(req.body);
+        const user = await User.create(data);
+        const customer = await Customer.create({
+            ...req.body,
+            userID: user._id
+        });
         return res.status(201).json(customer);
     }
     catch (e) {
