@@ -1,6 +1,8 @@
 const Location = require('./location.model')
+const User = require('../user/user.model')
 
 export async function createLocation(req,res){
+    console.log(req.body)
     const location = new Location(req.body)
     try{
         await location.save()
@@ -8,6 +10,19 @@ export async function createLocation(req,res){
     }
     catch(e){
         res.status(500).json(`Unable to create location: ${e} `)
+    }
+}
+
+export async function getUserLocation(req,res){
+    const _id = req.params.id 
+    try{
+        const location = await Location.find({owner: req.params.id})
+        //const user = await User.findById(req.params.id)
+        //await user.populate({path: 'locations'}).execPopulate()
+        res.status(200).send(location)
+    }
+    catch(e){
+        res.status(500).send(e)
     }
 }
 
