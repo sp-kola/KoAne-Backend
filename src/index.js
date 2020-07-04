@@ -14,7 +14,7 @@ const server = http.createServer(app);
 const io = socketio(server);
 
 app.get('/', (req, res) => {
-    res.send('Hello world');
+    res.send('Welcome to KoAne');
 });
 
 apiRoutes(app);
