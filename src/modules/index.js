@@ -4,17 +4,21 @@ import userRoutes from './user/user.routes';
 import customerRoutes from './customer/customer.routes';
 import orderRoutes from './order/order.routes';
 import productRoutes from './product/product.routes';
+import AdminRoutes from './admin/admin.routes';
+import messageRoutes from './message/message.routes';
 import { authJwt } from '../services/auth.services';
 
 export default app => {
     app.use('/vendor', vendorRoutes);
     app.use('/customer', customerRoutes);
-    app.use('/user',userRoutes);
-    app.use('/product',productRoutes);
+    app.use('/user', userRoutes);
+    app.use('/product', productRoutes);
     app.get('/hello', authJwt, (req, res) => {
         console.log(req)
         res.send('this is a private route');
     });
-    app.use('/location',locationRoutes);
-    app.use('/order',orderRoutes);
+    app.use('/location', locationRoutes);
+    app.use('/order', orderRoutes);
+    app.use('/admin', AdminRoutes);
+    app.use('/message', messageRoutes);
 };
