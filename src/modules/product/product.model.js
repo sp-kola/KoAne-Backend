@@ -26,7 +26,12 @@ const productSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
-    }
+    },
+    vendor : {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'Vendor'
+    },
 });
 
 const Product = mongoose.model('Product', productSchema);

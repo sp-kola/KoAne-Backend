@@ -2,10 +2,13 @@ const mongoose = require('mongoose')
 const validator = require('validator')
 
 const orderSchema = new mongoose.Schema({
+    products: {
+        type: Array,
+        required: true
+    },
     description : {
         type: String,
         trim: true,
-        required: true
     },
     completed : {
         type : Boolean,
@@ -27,6 +30,10 @@ const orderSchema = new mongoose.Schema({
     },
     longitude : {
         type : Number,
+        required: true
+    },
+    date: {
+        type: Date,
         required: true
     }
 },{

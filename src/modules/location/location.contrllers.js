@@ -38,6 +38,19 @@ export async function getLocation(req,res){
 
 }
 
+// db.places.aggregate([
+//     {
+//       $geoNear: {
+//          near: { type: "Point", coordinates: [ -73.99279 , 40.719296 ] },
+//          distanceField: "dist.calculated",
+//          maxDistance: 2,
+//          query: { category: "Parks" },
+//          includeLocs: "dist.location",
+//          spherical: true
+//       }
+//     }
+//  ])
+
 export async function updateLocation(req,res){
     const _id = req.params.id
     const location = await Location.findById(_id)
