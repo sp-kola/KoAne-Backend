@@ -1,5 +1,6 @@
-const mongoose = require('mongoose')
-const validator = require('validator')
+const mongoose = require("mongoose");
+const validator = require("validator");
+
 
 const orderSchema = new mongoose.Schema({
     products: {
@@ -9,25 +10,26 @@ const orderSchema = new mongoose.Schema({
     description : {
         type: String,
         trim: true,
+
+    completed: {
+      type: Boolean,
+      default: false,
     },
-    completed : {
-        type : Boolean,
-        default : false
+    customer: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "Customer",
     },
-    customer : {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'Customer'
+    vendor: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "Vendor",
     },
-    vendor : {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'Vendor'
+    latitude: {
+      type: Number,
+      required: true,
     },
-    latitude : {
-        type: Number,
-        required: true
-    },
+
     longitude : {
         type : Number,
         required: true
@@ -43,4 +45,6 @@ const orderSchema = new mongoose.Schema({
 const Order = mongoose.model('Order',orderSchema)
 
 
-module.exports = Order 
+const Order = mongoose.model("Order", orderSchema);
+
+module.exports = Order;
