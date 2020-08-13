@@ -25,3 +25,17 @@ export function login(req, res, next) {
     res.status(200).json(req.customer);
     return next();
 }
+
+//logout
+export function logout(req, res, next) {
+    try{
+        
+    }
+    catch(e){
+
+    }
+}
+
+//user data
+//update
+//delete
