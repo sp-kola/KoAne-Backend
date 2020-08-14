@@ -7,6 +7,10 @@ const locationSchema = new mongoose.Schema({
         trim: true,
         ref: 'User'
     },
+    type: {
+        type: String,
+        required: true
+    },
     position:[],
     // lattitude:{
     //     type: Number,

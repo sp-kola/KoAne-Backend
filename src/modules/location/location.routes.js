@@ -20,6 +20,9 @@ routes.delete('/user/',authJwt,LocationController.deleteUserLocation);
 //get near users
 routes.get('/users/',authJwt,LocationController.getUsersNear);
 
+//get same type users
+routes.get('/compete/',authJwt,LocationController.getSameUsersNear);
+
 routes.get('/getUser/:id',authJwt,LocationController.getUserLocation);
 
 export default routes;

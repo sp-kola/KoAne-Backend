@@ -13,6 +13,8 @@ middlewareConfig(app);
 const server = http.createServer(app);
 const io = socketio(server);
 
+app.set("io", io);
+
 app.get('/', (req, res) => {
     console.log('user logged:',req.user)
     res.send('Welcome to KoAne');

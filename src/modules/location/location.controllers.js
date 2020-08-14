@@ -1,6 +1,8 @@
 const Location = require('./location.model')
 const User = require('../user/user.model')
 
+//let io = app.get("io");
+
 export async function createLocation(req,res){
     console.log(req.body)
     var data = {
@@ -8,7 +10,10 @@ export async function createLocation(req,res){
             req.body.lattitude,
             req.body.longitude,
         ],
-        owner: req.user._id
+        owner: req.user._id,
+        type: req.user.type,
+        //owner: req.body.owner,
+        // type: req.body.type
     }
     const checkLocation = await Location.findOne({owner: req.user._id})
     console.log(checkLocation)
@@ -69,23 +74,56 @@ export async function getLocation(req,res){
 
 //read other user's locations
 export async function getUsersNear(req,res) {
+    //console.log(req.io)
+    // console.log('IO: ', io);
+    // io.on('connect', socket => {
+    //    // handle various socket connections here
+    // });
     const _id = req.user._id 
     try{
         const location = await Location.findOne({owner: _id})
         console.log('user location', location.position[0])
         var lat = location.position[0]
         var lan = location.position[1]
-        //const user = await User.findById(req.params.id)
-        //await user.populate({path: 'locations'}).execPopulate()
-        var allUsers = await Location.find()
-        //console.log('all',allUsers)
+        const type = location.type
+        var query = type == 'Vendor' ? 'Customer' : 'Vendor'
         var nearUsers = await Location.aggregate([
                             {
                             $geoNear: {
                                 near: { type: "Point", coordinates: [ lat,lan ] },
                                 distanceField: "dist.calculated",
                                 maxDistance: 2000,
-                                //query: { category: "Parks" },
+                                query: { type : query },
+                                includeLocs: "dist.location",
+                                spherical: true
+                            }
+                            }
+                        ])
+        nearUsers.splice(0,1)
+        res.status(200).send(nearUsers)
+    }
+    catch(e){
+        res.status(500).send(e)
+    }
+}
+
+//get same type users
+export async function getSameUsersNear(req,res) {
+    const _id = req.user._id 
+    try{
+        const location = await Location.findOne({owner: _id})
+        console.log('user location', location.position[0])
+        var lat = location.position[0]
+        var lan = location.position[1]
+        const type = location.type
+        var query = type == 'Vendor' ? 'Vendor' : 'Customer'
+        var nearUsers = await Location.aggregate([
+                            {
+                            $geoNear: {
+                                near: { type: "Point", coordinates: [ lat,lan ] },
+                                distanceField: "dist.calculated",
+                                maxDistance: 2000,
+                                query: { type : query },
                                 includeLocs: "dist.location",
                                 spherical: true
                             }
