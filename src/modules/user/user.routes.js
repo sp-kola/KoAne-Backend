@@ -9,11 +9,6 @@ const routes = new Router();
 
 routes.post('/login', authLocal,userController.login);
 
-// app.get('/hello', authJwt, (req, res) => {
-//     console.log(req)
-//     res.send('this is a private route');
-// });
-
 routes.post('/logout',authJwt, userController.logout)
 
 export default routes;

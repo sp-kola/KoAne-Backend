@@ -82,6 +82,10 @@ customerSchema.methods = {
         return {
             _id: this._id,
             userName: this.userName,
+            email: this.email,
+            firstName: this.firstName,
+            lastName: this.lastName,
+            contactNo: this.contactNo,
             //token: `JWT ${this.createToken()}`,
         };
     },

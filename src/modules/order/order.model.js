@@ -10,7 +10,7 @@ const orderSchema = new mongoose.Schema({
     description : {
         type: String,
         trim: true,
-
+    }, 
     completed: {
       type: Boolean,
       default: false,
@@ -38,12 +38,10 @@ const orderSchema = new mongoose.Schema({
         type: Date,
         required: true
     }
-},{
-    timestamps: true
+}
+, {
+  timestamps: true
 })
-
-const Order = mongoose.model('Order',orderSchema)
-
 
 const Order = mongoose.model("Order", orderSchema);
 
