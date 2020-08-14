@@ -17,6 +17,9 @@ routes.patch('/user/',authJwt,LocationController.updateUserLocation);
 //delete a location related to a user
 routes.delete('/user/',authJwt,LocationController.deleteUserLocation);
 
+//get near users
+routes.get('/users/',authJwt,LocationController.getUsersNear);
+
 routes.get('/getUser/:id',authJwt,LocationController.getUserLocation);
 
 export default routes;

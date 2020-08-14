@@ -4,8 +4,10 @@ const User = require('../user/user.model')
 export async function createLocation(req,res){
     console.log(req.body)
     var data = {
-        lattitude: req.body.lattitude,
-        longitude: req.body.longitude,
+        position:[
+            req.body.lattitude,
+            req.body.longitude,
+        ],
         owner: req.user._id
     }
     const checkLocation = await Location.findOne({owner: req.user._id})
@@ -13,8 +15,9 @@ export async function createLocation(req,res){
     if(checkLocation !== null){
         console.log('already a location exist for the current user, hence updating the location');
         try{
-            checkLocation.longitude = req.body.longitude
-            checkLocation.lattitude = req.body.lattitude
+            //console.log(req.body.lattitude, req.body.longitude)
+            checkLocation.position = [req.body.lattitude, req.body.longitude] 
+            //console.log('updated location',checkLocation)
             await checkLocation.save()
             res.status(201).json(checkLocation)
         }
@@ -64,6 +67,38 @@ export async function getLocation(req,res){
 
 }
 
+//read other user's locations
+export async function getUsersNear(req,res) {
+    const _id = req.user._id 
+    try{
+        const location = await Location.findOne({owner: _id})
+        console.log('user location', location.position[0])
+        var lat = location.position[0]
+        var lan = location.position[1]
+        //const user = await User.findById(req.params.id)
+        //await user.populate({path: 'locations'}).execPopulate()
+        var allUsers = await Location.find()
+        //console.log('all',allUsers)
+        var nearUsers = await Location.aggregate([
+                            {
+                            $geoNear: {
+                                near: { type: "Point", coordinates: [ lat,lan ] },
+                                distanceField: "dist.calculated",
+                                maxDistance: 2000,
+                                //query: { category: "Parks" },
+                                includeLocs: "dist.location",
+                                spherical: true
+                            }
+                            }
+                        ])
+        nearUsers.splice(0,1)
+        res.status(200).send(nearUsers)
+    }
+    catch(e){
+        res.status(500).send(e)
+    }
+}
+
 // db.places.aggregate([
 //     {
 //       $geoNear: {
@@ -91,10 +126,11 @@ export async function updateUserLocation(req,res){
         return res.status(400).send({error: 'Invalid updates'})
     }
     try{
-        updates.forEach(update => {
-            location[update] = req.body[update]
+        // updates.forEach(update => {
+        //     location[update] = req.body[update]
             
-        })
+        // })
+        location.position = [req.body.lattitude, req.body.longitude]
         console.log('updated location',location)
         await location.save()
         res.send(location)
