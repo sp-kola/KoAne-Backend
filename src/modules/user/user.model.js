@@ -40,6 +40,10 @@ const userSchema = new mongoose.Schema({
     type: {
         type: String,
         required: true
+    },
+    token : {
+        type: String,
+        //required: true
     }
 });
 
@@ -62,6 +66,7 @@ userSchema.virtual('locations',{
 })
 
 userSchema.pre('save', function (next) {
+    //this.createToken();
     if (this.isModified('password')) {
         this.password = this._hashPassword(this.password);
         return next();
@@ -76,20 +81,29 @@ userSchema.methods = {
     authenticateUser(password) {
         return compareSync(password, this.password);
     },
-    createToken() {
-        return jwt.sign(
+    async createToken() {
+        //console.log('creating token')
+        var token = jwt.sign(
             {
                 _id: this._id,
             },
             constants.JWT_SECRET,
         );
+        this.token = token
+        await this.save()
+        //console.log('in creating token',this, token)
+        return token;
     },
-    toJSON() {
-        return {
+    async toJSON() {
+        //await this.createToken()
+        console.log(this)
+        var user = {
             userName: this.userName,
             type: this.type,
-            token: `Bearer ${this.createToken()}`,
-        };
+            token: this.token,    
+        }
+        console.log('user to json',user)
+        return user
     },
 };
 
