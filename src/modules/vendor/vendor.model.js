@@ -13,7 +13,7 @@ const vendorSchema = new mongoose.Schema({
     userID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    },  
+    },
     email: {
         type: String,
         unique: true,
@@ -36,17 +36,21 @@ const vendorSchema = new mongoose.Schema({
         required: [true, 'First name is required'],
         trim: true,
     },
-    userName: {
+    CompanyName: {
         type: String,
-        required: [true, 'Username is required'],
+        required: [true, 'company name is required'],
         trim: true,
         unique: true,
     },
     contactNo: {
-        type: String,
+        type: Number,
         required: [true, 'contact number is required'],
         trim: true,
     },
+    vahicleNumber: {
+
+    },
+
     // password: {
     //     type: String,
     //     required: [true, 'Password is required'],
@@ -61,11 +65,11 @@ const vendorSchema = new mongoose.Schema({
     // },
 });
 
-vendorSchema.virtual('orders',{
+vendorSchema.virtual('orders', {
     ref: 'Order',
     localField: '_id',
     foreignField: 'vendor'
-})
+});
 
 vendorSchema.pre('save', function (next) {
     if (this.isModified('password')) {
@@ -99,6 +103,6 @@ vendorSchema.methods = {
     },
 };
 
-const Vendor = mongoose.model('Vendor',vendorSchema);
+const Vendor = mongoose.model('Vendor', vendorSchema);
 
 export default Vendor;
