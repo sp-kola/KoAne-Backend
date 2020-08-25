@@ -10,6 +10,8 @@ export async function signUp(req, res) {
     };
     try {
         const user = await User.create(data);
+        await user.createToken();
+
         const vendor = await Vendor.create({
             ...req.body,
             userID: user._id

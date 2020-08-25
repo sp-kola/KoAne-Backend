@@ -8,6 +8,7 @@ import { passwordReg } from './vendor.validations';
 import constants from '../../../config/constants';
 
 import Order from '../order/order.model';
+import Product from '../product/product.model';
 
 const vendorSchema = new mongoose.Schema({
     userID: {
@@ -70,6 +71,13 @@ vendorSchema.virtual('orders', {
     localField: '_id',
     foreignField: 'vendor'
 });
+
+vendorSchema.virtual('products',{
+    ref: 'Product',
+    localField: '_id',
+    foreignField: 'vendor'
+})
+
 
 vendorSchema.pre('save', function (next) {
     if (this.isModified('password')) {
