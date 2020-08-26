@@ -1,12 +1,24 @@
+import { authLocal, authJwt } from '../../services/auth.services';
 const express = require('express')
 const Order = require('./order.model')
 const router = new express.Router()
 const Customer = require('../customer/customer.model')
 const Vendor = require('../vendor/vendor.model')
 
-router.post('/create', async(req,res) => {
-    // const customer = new ObjectID(req.body.customer)
-    // const vendor = new ObjectID(req.body.vendor)
+router.post('/create',authJwt, async(req,res) => {
+    const data = {
+        products : req.body.products,
+        description: req.body.description,
+        completed: 'NC', //not complete
+        customer: req.user._id,
+        vendor: req.body.vendor,
+        position:[
+            req.body.lattitude,
+            req.body.longitude,
+        ],
+        date: req.body.date,
+    }
+
     const order = new Order(req.body)
     try{
         await order.save()
@@ -16,81 +28,29 @@ router.post('/create', async(req,res) => {
     }    
 })
  
-//GET /orders?complted=true
-//GET /orders?limit=10&skip=20
-//GET /orders?sortBy=createdAt:desc"
-
-router.get('/customerOrders/:id', async(req,res) => {
-
-    // const match = {}
-
-    // const sort = {}
-
-    // if(req.query.completed) {
-    //     match.completed = req.query.completed === 'true'
-    // }
-
-    // if(req.query.sortBy){
-    //     const parts = req.query.sortBy.split(':')
-    //     sort[parts[0]] = parts[1] === 'desc' ? -1 : 1
-    // }
-
-    //console.log(req.params.id);
-    //const customer = await Customer.findById(req.params.id)
-    //console.log(customer)
+router.get('/customerOrders',authJwt,async(req,res) => {
+    const id = req.user._id
     try{
-        //method 1
-        const orders = await Order.find({customer: req.params.id})
-        //method 2
-        
-        
-        // await customer.populate({
-        //     path: 'customerOrders',
-        // }).execPopulate()
+        const orders = await Order.find({customer: id})
         res.status(200).send(orders)
     }catch(e){
         res.status(500).send(e)
     }
 })
 
-router.get('/vendorOrders/:id', async(req,res) => {
+router.get('/vendorOrders',authJwt, async(req,res) => {
 
-    // const match = {}
-
-    // const sort = {}
-
-    // if(req.query.completed) {
-    //     match.completed = req.query.completed === 'true'
-    // }
-
-    // if(req.query.sortBy){
-    //     const parts = req.query.sortBy.split(':')
-    //     sort[parts[0]] = parts[1] === 'desc' ? -1 : 1
-    // }
-
+    const id = req.user._id
     try{
-        //method 1
-        const orders = await Order.find({vendor: req.params.id})
-        //method 2
-        // const vendor = await Vendor.findById(req.params.id)
-        // await vendor.populate({
-        //     path: 'vendorOrders',
-        //     match,
-        //     options: {
-        //         limit : parseInt(req.query.limit),
-        //         skip : parseInt(req.query.skip),
-        //         sort 
-        //     }
-        // }).execPopulate()
+        const orders = await Order.find({vendor:id})
         res.status(200).send(orders)
     }catch(e){
         res.status(500).send(e)
     }
 })
 
-
-router.get('/get/:id', async(req,res) => {
-    //const _id = req.params.id
+//get order by id
+router.get('/get/:id',authJwt, async(req,res) => {
     try{
         const order = await Order.findById(req.params.id)
         if(!order){
@@ -102,15 +62,46 @@ router.get('/get/:id', async(req,res) => {
     }
 })
 
-router.patch('/update/:id',async(req,res) => {
+//delivering status
+router.patch('/deliver/:id',authJwt,async(req,res) => {
+   try{
+       const order = await Order.findById(req.params.id)
+       if(!order){
+           return res.status(404).send()
+       }
+       order.status = 'D' //D -> delivering
+       await order.save()
+
+       //const order = await Order.findByIdAndUpdate(_id,req.body, {runValidators: true, new: true})
+       res.send(order)
+   }catch(e){
+       res.status(400).send(e)
+   }
+
+})
+
+//complete status
+router.patch('/deliver/:id',authJwt,async(req,res) => {
+    try{
+        const order = await Order.findById(req.params.id)
+        if(!order){
+            return res.status(404).send()
+        }
+        order.status = 'C' //C -> Completed
+        await order.save()
+ 
+        //const order = await Order.findByIdAndUpdate(_id,req.body, {runValidators: true, new: true})
+        res.send(order)
+    }catch(e){
+        res.status(400).send(e)
+    }
+ 
+ })
+
+//update order
+router.patch('/update/:id',authJwt,async(req,res) => {
     
-    // const _id = req.params.id
      const updates = Object.keys(req.body)
-    // const allowedUpdates = ['description','completed']
-    // const isValidOperation = updates.every(update => allowedUpdates.includes(update))
-    // if(!isValidOperation){
-    //     return res.status(400).send({error: 'Invalid updates'})
-    // }
 
     try{
         const order = await Order.findById(req.params.id)
@@ -129,7 +120,8 @@ router.patch('/update/:id',async(req,res) => {
 
 })
 
-router.delete('/delete/:id', async(req,res) => {
+//delete an order
+router.delete('/delete/:id',authJwt,async(req,res) => {
 
     const _id = req.params.id
     try{

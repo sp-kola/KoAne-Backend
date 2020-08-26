@@ -11,8 +11,8 @@ const orderSchema = new mongoose.Schema({
         type: String,
         trim: true,
     }, 
-    completed: {
-      type: Boolean,
+    status: {
+      type: String,
       default: false,
     },
     customer: {
@@ -25,15 +25,7 @@ const orderSchema = new mongoose.Schema({
       required: true,
       ref: "Vendor",
     },
-    latitude: {
-      type: Number,
-      required: true,
-    },
-
-    longitude : {
-        type : Number,
-        required: true
-    },
+    posotion:[],
     date: {
         type: Date,
         required: true
