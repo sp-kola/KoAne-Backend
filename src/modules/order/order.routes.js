@@ -1,4 +1,5 @@
 import { authLocal, authJwt } from '../../services/auth.services';
+import routes from '../location/location.routes';
 const express = require('express')
 const Order = require('./order.model')
 const router = new express.Router()
@@ -139,4 +140,4 @@ router.delete('/delete/:id',authJwt,async(req,res) => {
 
 })
 
-module.exports = router
+export default routes;
