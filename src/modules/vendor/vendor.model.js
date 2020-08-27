@@ -72,7 +72,7 @@ vendorSchema.virtual('orders', {
     foreignField: 'vendor'
 });
 
-vendorSchema.virtual('products',{
+vendorSchema.virtual('products', {
     ref: 'Product',
     localField: '_id',
     foreignField: 'vendor'
