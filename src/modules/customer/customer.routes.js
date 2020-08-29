@@ -25,7 +25,7 @@ routes.post('/signup', celebrate({
 
 //routes.post('/login', authLocal, customerController.login);
 
-routes.get('/',authJwt,customerController.me);
+routes.get('/me',authJwt,customerController.me);
 
 routes.patch('/',authJwt,customerController.updateCustomer);
 

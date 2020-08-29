@@ -39,9 +39,10 @@ export async function me(req,res) {
 
 //update
 export async function updateCustomer(req,res){
+    console.log('in update ',req.body.email)
     const customer = await Customer.findOne({email: req.user.email})
     const updates = Object.keys(req.body)
-    const allowedUpdates = ['firstName','lastName','password','email','contactNo','userName']
+    const allowedUpdates = ['firstName','lastName','password','email','contactNo','userName','lastReportedLocation','deliveryAddresses']
     const isValidOperation = updates.every( (update) => allowedUpdates.includes(update))
 
     if(!isValidOperation){
@@ -50,7 +51,7 @@ export async function updateCustomer(req,res){
 
     try{
         //update the user data
-        console.log('updating user',req.body.email)
+        console.log('updating user',req.body.updateUser)
         if(req.body.email){
             req.user.email = req.body.email 
         }

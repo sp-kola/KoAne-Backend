@@ -14,6 +14,7 @@ const localOpts = {
 
 const localStrategy = new LocalStrategy(localOpts, async (email, password, done) => {
     try {
+        console.log('in local',email,password)
         const user = await User.findOne({ email });
         if (!user) {
             return done(null, false);
