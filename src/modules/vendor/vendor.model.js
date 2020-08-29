@@ -47,7 +47,36 @@ const vendorSchema = new mongoose.Schema({
         type: String,
         required: [true, 'contact number is required'],
         trim: true,
+        unique: true,
     },
+    vehicleNo: {
+        type: String,
+    },
+    visitingDates: {
+        type: []
+    },
+    viitingPlaces: {
+        type: []
+    },
+    nic:{
+        type:String,
+        required: true
+    },
+    businessName:{
+        type:String,
+        required: true
+    },
+    businessAddress:{
+        type:String,
+        required: true
+    },
+    bio:{
+        type:String,
+    },
+    delivering: {
+        type: Boolean,
+        default : false
+    }
     // password: {
     //     type: String,
     //     required: [true, 'Password is required'],
