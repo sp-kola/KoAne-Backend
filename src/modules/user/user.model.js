@@ -25,6 +25,9 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Username is required'],
         trim: true,
     },
+    avatar: {
+        type: Buffer
+    },
     password: {
         type: String,
         required: [true, 'Password is required'],

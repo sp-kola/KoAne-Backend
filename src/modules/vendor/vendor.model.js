@@ -47,7 +47,9 @@ const vendorSchema = new mongoose.Schema({
         type: Number,
         required: [true, 'contact number is required'],
         trim: true,
+        unique: true,
     },
+<<<<<<< HEAD
 
     businessAddress: {
         type: String,
@@ -58,7 +60,36 @@ const vendorSchema = new mongoose.Schema({
         type: String,
         trim: true,
 
+=======
+    vehicleNo: {
+        type: String,
     },
+    visitingDates: {
+        type: []
+    },
+    viitingPlaces: {
+        type: []
+>>>>>>> 17e5d45b4e5036cf7d12b86a983f9e6e02590374
+    },
+    nic:{
+        type:String,
+        required: true
+    },
+    businessName:{
+        type:String,
+        required: true
+    },
+    businessAddress:{
+        type:String,
+        required: true
+    },
+    bio:{
+        type:String,
+    },
+    delivering: {
+        type: Boolean,
+        default : false
+    }
 
     deliveryRoutes: {
 

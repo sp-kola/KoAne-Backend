@@ -9,6 +9,6 @@ const routes = new Router();
 
 routes.post('/login', authLocal,userController.login);
 
-routes.post('/logout',authJwt, userController.logout)
+routes.patch('/logout',authJwt, userController.logout)
 
 export default routes;
