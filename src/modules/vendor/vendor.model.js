@@ -34,7 +34,7 @@ const vendorSchema = new mongoose.Schema({
     },
     lastName: {
         type: String,
-        required: [true, 'First name is required'],
+        required: [true, 'Last name is required'],
         trim: true,
     },
     CompanyName: {
@@ -48,10 +48,29 @@ const vendorSchema = new mongoose.Schema({
         required: [true, 'contact number is required'],
         trim: true,
     },
+
+    businessAddress: {
+        type: String,
+        trim: true,
+    },
+
     vahicleNumber: {
+        type: String,
+        trim: true,
 
     },
 
+    deliveryRoutes: {
+
+    },
+
+    deliveryDates: {
+
+    },
+
+    deliveryTime: {
+        
+    }
     // password: {
     //     type: String,
     //     required: [true, 'Password is required'],
@@ -76,7 +95,7 @@ vendorSchema.virtual('products', {
     ref: 'Product',
     localField: '_id',
     foreignField: 'vendor'
-})
+});
 
 
 vendorSchema.pre('save', function (next) {
