@@ -49,18 +49,6 @@ const vendorSchema = new mongoose.Schema({
         trim: true,
         unique: true,
     },
-<<<<<<< HEAD
-
-    businessAddress: {
-        type: String,
-        trim: true,
-    },
-
-    vahicleNumber: {
-        type: String,
-        trim: true,
-
-=======
     vehicleNo: {
         type: String,
     },
@@ -69,39 +57,27 @@ const vendorSchema = new mongoose.Schema({
     },
     viitingPlaces: {
         type: []
->>>>>>> 17e5d45b4e5036cf7d12b86a983f9e6e02590374
     },
-    nic:{
-        type:String,
+    nic: {
+        type: String,
         required: true
     },
-    businessName:{
-        type:String,
+    businessName: {
+        type: String,
         required: true
     },
-    businessAddress:{
-        type:String,
+    businessAddress: {
+        type: String,
         required: true
     },
-    bio:{
-        type:String,
+    bio: {
+        type: String,
     },
     delivering: {
         type: Boolean,
-        default : false
+        default: false
     }
 
-    deliveryRoutes: {
-
-    },
-
-    deliveryDates: {
-
-    },
-
-    deliveryTime: {
-        
-    }
     // password: {
     //     type: String,
     //     required: [true, 'Password is required'],
