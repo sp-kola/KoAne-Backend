@@ -46,7 +46,7 @@ export async function createLocation(req,res){
 }
 
 export async function getUserLocation(req,res){
-    const _id = req.user._id 
+    const _id = req.user._id
     try{
         const location = await Location.find({owner: _id})
         //const user = await User.findById(req.params.id)

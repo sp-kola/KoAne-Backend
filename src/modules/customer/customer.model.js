@@ -47,6 +47,11 @@ const customerSchema = new mongoose.Schema({
         required: [true, 'contact nummber is required'],
         trim: true,
     },
+    lastReportedLocation:[],
+    deliveryAddresses: [{
+        name: String,
+        position: []
+    }]
 });
 
 customerSchema.virtual('orders',{
@@ -86,6 +91,8 @@ customerSchema.methods = {
             firstName: this.firstName,
             lastName: this.lastName,
             contactNo: this.contactNo,
+            lastReportedLocation:this.lastReportedLocation,
+            deliveryAddresses: this.deliveryAddresses
             //token: `JWT ${this.createToken()}`,
         };
     },
