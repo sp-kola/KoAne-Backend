@@ -1,10 +1,13 @@
 const Location = require('./location.model')
 const User = require('../user/user.model')
+import Customer from '../customer/customer.model';
 
 //let io = app.get("io");
 
 export async function createLocation(req,res){
     console.log(req.body)
+    let flag = false;
+    let sendLocation = null;
     var data = {
         position:[
             req.body.lattitude,
@@ -24,22 +27,51 @@ export async function createLocation(req,res){
             checkLocation.position = [req.body.lattitude, req.body.longitude] 
             //console.log('updated location',checkLocation)
             await checkLocation.save()
-            res.status(201).json(checkLocation)
+            //res.status(201).json(checkLocation)
+            sendLocation = checkLocation;
+            flag = true
         }
         catch(e){
             res.status(500).json(`Unable to update location: ${e} `)
+            flag = false
         }
-        
-
     }
     else{
         const location = new Location(data)
         try{
             await location.save()
-            res.status(201).json(location)
+            //res.status(201).json(location)
+            sendLocation = location;
+            flag = true
         }
         catch(e){
             res.status(500).json(`Unable to create location: ${e} `)
+            flag = false
+        }
+    }
+    if(flag){
+        if(req.user.type == 'Customer'){
+            //const customer = await Customer.findOne({email: req.user.email})
+            const customer = await Customer.findOne({email: req.user.email})
+            console.log('customer', customer)
+            try{
+                //customer.lastReportedLocation = [req.body.lattitude,req.body.longitude]
+                customer.lastReportedLocation = sendLocation._id
+                let postionData = [req.body.lattitude, req.body.longitude]
+                customer.deliveryAddresses.push({
+                    position: postionData}
+                );
+                await customer.save()    
+                res.status(201).json(customer)
+            }
+            catch(err){
+                res.status(500).json(`Unable to create location: ${e} `)    
+            }
+
+        }
+        else{
+           //vendor 
+           res.status(201).json(sendLocation)    
         }
     }
     

@@ -1,5 +1,5 @@
-import Customer from './customer.model';
 import User from '../user/user.model';
+import Customer from '../customer/customer.model';
 
 const sharp = require('sharp')
 
@@ -39,10 +39,11 @@ export async function me(req,res) {
 
 //update
 export async function updateCustomer(req,res){
-    console.log('in update ',req.body.email)
+    
     const customer = await Customer.findOne({email: req.user.email})
     const updates = Object.keys(req.body)
-    const allowedUpdates = ['firstName','lastName','password','email','contactNo','userName','lastReportedLocation','deliveryAddresses']
+    console.log('in update ',req.user.email, updates)
+    const allowedUpdates = ['firstName','lastName','password','email','contactNo','userName','deliveryAddresses']
     const isValidOperation = updates.every( (update) => allowedUpdates.includes(update))
 
     if(!isValidOperation){
@@ -51,7 +52,8 @@ export async function updateCustomer(req,res){
 
     try{
         //update the user data
-        console.log('updating user',req.body.updateUser)
+        console.log('updating user')
+        console.log('customer in update', customer)
         if(req.body.email){
             req.user.email = req.body.email 
         }
@@ -65,13 +67,18 @@ export async function updateCustomer(req,res){
 
         await console.log('updated user: ', req.user)
         //update the customer data
-        updates.forEach(update => customer[update] = req.body[update])
-
-        await customer.save()
+        await updates.forEach(update => {
+            console.log(update, req.body[update])
+            customer[update] = req.body[update]
+        })
+        console.log('done update customer', customer)
+        const updatedCustomer = customer
+        await updatedCustomer.save()
         //const user = await User.findByIdAndUpdate(_id,req.body,{ new: true, runValidators: true })
         res.send(customer)
 
     }catch(e){
+        console.log(e)
         res.status(400).send(e)
     }
 }
@@ -97,6 +104,19 @@ export async function profilePic(req,res) {
     await req.user.save()
     res.status(200).send();
 }
+
+// export async function profilePic(req,res) {
+//     var base64Data = req.body.image;
+//     console.log('writing file...', base64Data);
+//     fs.writeFile(__dirname + "/upload/out.png", base64Data, 'base64', function(err) {
+//         if (err) console.log(err);
+//         fs.readFile(__dirname + "/upload/out.png", function(err, data) {
+//             if (err) throw err;
+//             console.log('reading file...', data.toString('base64'));
+//             res.send(data);
+//         });
+//     });
+// }
 
 export async function deleteProfilePic(req,res) {
     req.user.avatar = undefined  
