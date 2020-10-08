@@ -1,39 +1,40 @@
-const mongoose = require('mongoose')
-const validator = require('validator')
+const mongoose = require("mongoose");
+const validator = require("validator");
+
 
 const orderSchema = new mongoose.Schema({
+    products: {
+        type: Array,
+        required: true
+    },
     description : {
         type: String,
         trim: true,
-        required: true
+    }, 
+    status: {
+      type: String,
+      default: false,
     },
-    completed : {
-        type : Boolean,
-        default : false
+    customer: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "Customer",
     },
-    customer : {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'Customer'
+    vendor: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "Vendor",
     },
-    vendor : {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'Vendor'
-    },
-    latitude : {
-        type: Number,
-        required: true
-    },
-    longitude : {
-        type : Number,
+    posotion:[],
+    date: {
+        type: Date,
         required: true
     }
-},{
-    timestamps: true
+}
+, {
+  timestamps: true
 })
 
-const Order = mongoose.model('Order',orderSchema)
+const Order = mongoose.model("Order", orderSchema);
 
-
-module.exports = Order 
+module.exports = Order;

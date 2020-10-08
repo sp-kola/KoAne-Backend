@@ -14,14 +14,17 @@ const localOpts = {
 
 const localStrategy = new LocalStrategy(localOpts, async (email, password, done) => {
     try {
+        console.log('in local',email,password)
         const user = await User.findOne({ email });
-
         if (!user) {
             return done(null, false);
         }
         else if (!user.authenticateUser(password)) {
             return done(null, false);
         }
+        await user.createToken();
+        console.log('logged in user', user);
+        //req.user = user
         return done(null, user);
     }
     catch (e) {
@@ -36,13 +39,16 @@ const jwtOpts = {
 };
 
 const JwtStrategy = new JWTStrategy(jwtOpts, async (payload, done) => {
-    console.log(payload)
+    //let opts = {};
+    //opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+    console.log(payload, jwtOpts)
     try {
         const user = await User.findById(payload._id);
         console.log(user)
         if (!user) {
             return done(null, false);
         }
+        // if else(user.token !=)
         return done(null, user);
     }
     catch (e) {
