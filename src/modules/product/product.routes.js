@@ -1,5 +1,8 @@
 import {Router} from 'express';
 const Product = require('./product.model');
+const bodyParser = require('body-parser');
+const multer = require('multer');
+const upload = multer({dest: 'uploads/'});
 
 const productRoutes = new Router();
 
@@ -15,12 +18,15 @@ productRoutes.get('/', async (req,res) => {
 });
 
 // create a new product
-productRoutes.post('/create', (req,res)=>{
+productRoutes.post('/create',upload.single('productImage.png'), (req,res)=>{
+    // console.log(req.file);
+    
     const product = new Product({
         productName: req.body.productName,
         price: req.body.price,
         details: req.body.details,
-        category: req.body.category
+        category: req.body.category,
+        image: req.file 
     });
     product.save().then( data => {
         res.json(data);
