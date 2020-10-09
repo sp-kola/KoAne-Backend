@@ -13,10 +13,20 @@ export async function signUp(req, res) {
         const user = await User.create(data);
         await user.createToken();
 
-        const vendor = await Vendor.create({
-            ...req.body,
+        const vendorData = {
+            email: req.body.email,
+            userName: req.body.userName,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            contactNo: req.body.contactNo,
+            nic: req.body.nic,
+            businessName: req.body.businessName,
+            businessAddress: req.body.businessAddress,
             userID: user._id
-        });
+        };
+
+        const vendor = await Vendor.create(vendorData);
+        //await vendor.save();
         return res.status(201).json(vendor);
     }
     catch (e) {
@@ -30,7 +40,7 @@ export function login(req, res, next) {
 }
 
 export async function getVendorById(req, res) {
-    _id = req.Vendor._id;
+    _id = req.body._id;
     const vendor = await Vendor.findById(_id);
     if (!vendor) {
         res.status(500).json(e);
