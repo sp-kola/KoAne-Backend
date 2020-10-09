@@ -28,6 +28,9 @@ const userSchema = new mongoose.Schema({
     avatar: {
         type: Buffer
     },
+    profilePic: {
+        type: []
+    },
     password: {
         type: String,
         required: [true, 'Password is required'],
