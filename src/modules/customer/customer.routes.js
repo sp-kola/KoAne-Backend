@@ -9,14 +9,16 @@ const bodyParser = require('body-parser')
 const multer = require('multer')
 const upload = multer({
     //dest: 'src/modules/customer/avatar',
+
     limits:{
         fileSize: 10000000 //10Mb
+
     },
-    fileFilter(req,file,cb){
-        if(!file.originalname.match(/\.(png|jpg|jpeg)$/)){
+    fileFilter(req, file, cb) {
+        if (!file.originalname.match(/\.(png|jpg|jpeg)$/)) {
             return cb(new Error('Wrong file type'))
         }
-        cb(undefined,true)
+        cb(undefined, true)
     }
 })
 
@@ -45,11 +47,11 @@ routes.post('/signup', celebrate({
 
 //routes.post('/login', authLocal, customerController.login);
 
-routes.get('/me',authJwt,customerController.me);
+routes.get('/me', authJwt, customerController.me);
 
-routes.patch('/',authJwt,customerController.updateCustomer);
+routes.patch('/', authJwt, customerController.updateCustomer);
 
-routes.delete('/',authJwt,customerController.deleteCustomer);
+routes.delete('/', authJwt, customerController.deleteCustomer);
 
 routes.post('/avatar',authJwt,upload.single('upload'),customerController.profilePic,(error,req,res,next) => {
     console.log(error)
@@ -65,7 +67,8 @@ routes.post('/avatar',authJwt,upload.single('upload'),customerController.profile
 
 routes.delete('/avatar',authJwt,customerController.deleteProfilePic);
 
-routes.get('/avatar/:id',customerController.getProfilePic);
+
+routes.get('/avatar/:id', customerController.getProfilePic);
 
 
 export default routes;
