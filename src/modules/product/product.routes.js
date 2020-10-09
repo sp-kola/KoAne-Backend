@@ -48,15 +48,28 @@ productRoutes.get('/get/:id', async (req,res) => {
     }   
 });
 
+// search a product by name
+productRoutes.get('/getproduct/:name', async (req,res) => {
+    try {
+        const findname = req.params.name;
+        // console.log(findname);
+        const objs = await Product.find({productName:{ $regex:'.*'+findname+'.*'} });
+        console.log(objs)
+        res.json(objs);
+    } catch (error) {
+        res.json({message: error});        
+    }
+})
+
 //get by vendors ID
 productRoutes.get('/vendorProducts/:id', async(req,res) => {
 
 
     try{
-        const products = await Product.find({vendor: req.params.id})
+        const products = await Product.find({vendor: req.params.id});
         //method 2
-        const vendor = await Vendor.findById(req.params.id)
-        console.log(vendor)
+        const vendor = await Vendor.findById(req.params.id);
+        // console.log(vendor);
         await vendor.populate({
             path: 'products',
             //match,
@@ -65,12 +78,12 @@ productRoutes.get('/vendorProducts/:id', async(req,res) => {
             //     skip : parseInt(req.query.skip),
             //     sort 
             // }
-        }).execPopulate()
-        res.status(200).send(products)
+        }).execPopulate();
+        res.status(200).send(products);
     }catch(e){
-        res.status(500).send(e)
+        res.status(500).send(e);
     }
-})
+});
 
 // update a product by id
 productRoutes.patch('/update/:id', async (req,res) =>{
