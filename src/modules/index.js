@@ -10,6 +10,9 @@ import messageRoutes from './message/message.routes';
 import { authJwt } from '../services/auth.services';
 
 export default app => {
+
+    let io = app.get("io");
+
     app.use('/vendor', vendorRoutes);
     app.use('/customer', customerRoutes);
     app.use('/user', userRoutes);
@@ -18,7 +21,10 @@ export default app => {
         console.log(req)
         res.send('this is a private route');
     });
-    app.use('/location', locationRoutes);
+    app.use('/location',(req,res,next)=> {
+        req.io = io
+        next()
+    }, locationRoutes);
     app.use('/order', orderRoutes);
     app.use('/admin', AdminRoutes);
     app.use('/message', messageRoutes);

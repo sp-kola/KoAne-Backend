@@ -2,16 +2,16 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 
 const orderSchema = new mongoose.Schema({
-  products: {
-    type: Array,
-    required: true,
-  },
-  description: {
-    type: String,
-    trim: true,
-
-    completed: {
-      type: Boolean,
+    products: {
+        type: Array,
+        required: true
+    },
+    description : {
+        type: String,
+        trim: true,
+    }, 
+    status: {
+      type: String,
       default: false,
     },
     customer: {
@@ -24,22 +24,15 @@ const orderSchema = new mongoose.Schema({
       required: true,
       ref: "Vendor",
     },
-    latitude: {
-      type: Number,
-      required: true,
-    },
-
-    longitude: {
-      type: Number,
-      required: true,
-    },
+    posotion:[],
     date: {
-      type: Date,
-      required: true,
-    },
-  },
-  timestamps: true,
-});
+        type: Date,
+        required: true
+    }
+}
+, {
+  timestamps: true
+})
 
 const Order = mongoose.model("Order", orderSchema);
 
