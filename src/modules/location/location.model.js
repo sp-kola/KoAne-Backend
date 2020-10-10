@@ -24,6 +24,12 @@ const locationSchema = new mongoose.Schema({
     timestamps: true
 });
 
+locationSchema.virtual('customers',{
+    ref: 'Customer',
+    localField: '_id',
+    foreignField: 'lastReportedLocation'
+})
+
 function arrayLimit(val) {
     return val.length == 2;
   }
@@ -35,3 +41,4 @@ locationSchema.index({ 'position' : "2dsphere" });
 const Location = mongoose.model('Location',locationSchema);
 
 module.exports = Location;
+//export default Location;

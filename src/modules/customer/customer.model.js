@@ -1,5 +1,6 @@
 /* eslint-disable no-invalid-this */
 const mongoose = require('mongoose');
+const Location = require('../location/location.model')
 import validator from 'validator';
 import { hashSync, compareSync } from 'bcrypt-nodejs';
 import jwt from 'jsonwebtoken';
@@ -47,12 +48,16 @@ const customerSchema = new mongoose.Schema({
         required: [true, 'contact nummber is required'],
         trim: true,
     },
-    lastReportedLocation:[],
+    // lastReportedLocation:{
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'Location'
+    // },
     deliveryAddresses: [{
         name: String,
         position: []
     }]
-});
+}
+);
 
 customerSchema.virtual('orders',{
     ref: 'Order',
@@ -91,13 +96,17 @@ customerSchema.methods = {
             firstName: this.firstName,
             lastName: this.lastName,
             contactNo: this.contactNo,
-            lastReportedLocation:this.lastReportedLocation,
+            lastReportedLocation: this.lastReportedLocation,
             deliveryAddresses: this.deliveryAddresses
             //token: `JWT ${this.createToken()}`,
         };
     },
 };
 
-const Customer = mongoose.model('Customer',customerSchema); 
+const Customer = mongoose.model('Customer',customerSchema);
 
 export default Customer;
+//module.exports = Customer;
+// module.exports = {
+//     Customer
+// }
