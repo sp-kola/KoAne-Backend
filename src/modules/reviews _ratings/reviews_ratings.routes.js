@@ -2,6 +2,7 @@ const express = require("express");
 const reviewsRouter = express.Router();
 const Review = require("./reviews_ratings.model");
 
+//get all the reviews and rating
 reviewsRouter.get("/", async (req, res) => {
   //   console.log("Get requested");
   //   res.send("Get requested");
@@ -12,6 +13,8 @@ reviewsRouter.get("/", async (req, res) => {
     res.send("Error" + err);
   }
 });
+
+//Add a new review/rating
 
 reviewsRouter.post("/", async (req, res) => {
   const reviews = new Review({
@@ -24,6 +27,16 @@ reviewsRouter.post("/", async (req, res) => {
     res.json(reviewing);
   } catch (err) {
     res.send("Error");
+  }
+});
+
+// delete a review
+reviewsRouter.delete("/delete/:id", async (req, res) => {
+  try {
+    const reviewsRemove = await Review.remove({ _id: req.params.id });
+    res.json(reviewsRemove);
+  } catch (err) {
+    res.json({ message: err });
   }
 });
 
