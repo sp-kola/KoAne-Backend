@@ -65,6 +65,12 @@ userSchema.virtual('customers',{
     foreignField: 'userID'
 })
 
+userSchema.virtual('admins',{
+    ref: 'Admin',
+    localField: '_id',
+    foreignField: 'userID'
+})
+
 userSchema.virtual('locations',{
     ref: 'Location',
     localField: '_id',
