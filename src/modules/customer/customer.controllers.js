@@ -99,10 +99,23 @@ export async function deleteCustomer(req,res) {
 
 //profile pic
 export async function profilePic(req,res) {
-    const buffer = await sharp(req.file.buffer).resize({width:250, height: 250}).png().toBuffer()
-    req.user.avatar = buffer  
-    await req.user.save()
-    res.status(200).send();
+    // console.log('req ', req.body.formdata)
+    // const buffer = await sharp(req.file.buffer).resize({width:250, height: 250}).png().toBuffer()
+    // req.user.avatar = buffer
+    try{
+        req.user.profilePic = {
+            image: req.body.image,
+            uri: req.body.uri
+        }  
+        var user = await req.user.save()
+        console.log('seaved user', user)
+        res.status(200).send(user);
+    }
+    catch(e){
+        console.log(e)
+        res.status(500).send()
+    }
+    
 }
 
 // export async function profilePic(req,res) {

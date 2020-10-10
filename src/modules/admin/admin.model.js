@@ -11,11 +11,12 @@ const adminSchema = new Schema({
         unique: true,
         match: /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/
     },
-    password: {
-        type: String,
-        required: true
+    userID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     },
 });
 
 const Admin = mongoose.model('Admin', adminSchema);
-module.exports = Admin;
+
+export default Admin;
