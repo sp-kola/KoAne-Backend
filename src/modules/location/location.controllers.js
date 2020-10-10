@@ -24,6 +24,7 @@ export async function createLocation(req,res){
         console.log('already a location exist for the current user, hence updating the location');
         try{
             //console.log(req.body.lattitude, req.body.longitude)
+            console.log('updating location')
             checkLocation.position = [req.body.lattitude, req.body.longitude] 
             //console.log('updated location',checkLocation)
             await checkLocation.save()
@@ -32,6 +33,7 @@ export async function createLocation(req,res){
             flag = true
         }
         catch(e){
+            console.log(e)
             res.status(500).json(`Unable to update location: ${e} `)
             flag = false
         }
@@ -56,16 +58,16 @@ export async function createLocation(req,res){
             console.log('customer', customer)
             try{
                 //customer.lastReportedLocation = [req.body.lattitude,req.body.longitude]
-                customer.lastReportedLocation = sendLocation._id
-                let postionData = [req.body.lattitude, req.body.longitude]
-                customer.deliveryAddresses.push({
-                    position: postionData}
-                );
-                await customer.save()    
-                res.status(201).json(customer)
+                // customer.lastReportedLocation = sendLocation._id
+                // let postionData = [req.body.lattitude, req.body.longitude]
+                // customer.deliveryAddresses.push({
+                //     position: postionData}
+                // );
+                // await customer.save()    
+                res.status(201).json(sendLocation)
             }
             catch(err){
-                res.status(500).json(`Unable to create location: ${e} `)    
+                res.status(500).json(`Unable to create location: ${err} `)    
             }
 
         }
