@@ -72,11 +72,11 @@ routes.post('/signup', celebrate({
 
 //routes.post('/login', authLocal, customerController.login);
 
-routes.get('/me',authJwt,customerController.me);
+routes.get('/me', authJwt, customerController.me);
 
-routes.patch('/',authJwt,customerController.updateCustomer);
+routes.patch('/', authJwt, customerController.updateCustomer);
 
-routes.delete('/',authJwt,customerController.deleteCustomer);
+routes.delete('/', authJwt, customerController.deleteCustomer);
 
 routes.post('/avatar',authJwt,customerController.profilePic);
 
@@ -89,7 +89,8 @@ routes.post('/avatar',authJwt,customerController.profilePic);
 
 routes.delete('/avatar',authJwt,customerController.deleteProfilePic);
 
-routes.get('/avatar/:id',customerController.getProfilePic);
+
+routes.get('/avatar/:id', customerController.getProfilePic);
 
 
 export default routes;
