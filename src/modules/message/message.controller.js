@@ -18,31 +18,66 @@ exports.msg_get_all_messages = (req, res, next) => {
         });
 }
 
-
-
-exports.msg_create_message = (req, res, next) => {
-    //const senderId = req.params.userId
+exports.msg_get_unread_messages = (req, res, next) => {
     //const receiverId = req.params.userId
-    const message = new Message({
-        sender: req.body.sender,
-        //receiver: receiverId,
-        receiver: req.body.receiver,
-        message: req.body.message,
-        read: false
-    });
-    message
-        .save()
-        .then(result => {
-            console.log(result);
-            res.json({
-                message: 'Message Send!'
-            });
+    //Message.find({ receiver: receiverId })
+    Message.find({"read":false})
+        .exec()
+        .then(docs => {
+
+            console.log(docs);
+            res.json(docs);
         })
         .catch(err => {
             console.log(err);
             res.json({
                 error: err
             });
+        });
+}
+
+exports.msg_get_read_messages = (req, res, next) => {
+    //const receiverId = req.params.userId
+    //Message.find({ receiver: receiverId })
+    Message.find({ "read": true })
+        .exec()
+        .then(docs => {
+
+            console.log(docs);
+            res.json(docs);
+        })
+        .catch(err => {
+            console.log(err);
+            res.json({
+                error: err
+            });
+        });
+}
+
+exports.msg_create_message = (p1,p2,p3) => {
+    //const senderId = req.params.userId
+    //const receiverId = req.params.userId
+    const message = new Message({
+        sender: p1,
+        //receiver: receiverId,
+        receiver: p2,
+        message: p3,
+        read: false
+    });
+    message
+        .save()
+        .then(result => {
+            console.log(result);
+            console.log('Message Send!');
+           /* res.json({
+                message: 'Message Send!'
+            });*/
+        })
+        .catch(err => {
+            console.log(err);
+           /* res.json({
+                error: err
+            });*/
         })
 
 }

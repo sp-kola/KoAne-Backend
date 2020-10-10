@@ -1,4 +1,10 @@
 const mongoose = require('mongoose');
+import validator from 'validator';
+import { hashSync, compareSync } from 'bcrypt-nodejs';
+import jwt from 'jsonwebtoken';
+import constants from '../../../config/constants';
+
+
 const Schema = mongoose.Schema;
 
 const adminSchema = new Schema({
@@ -18,4 +24,5 @@ const adminSchema = new Schema({
 });
 
 const Admin = mongoose.model('Admin', adminSchema);
-module.exports = Admin;
+
+export default Admin;
