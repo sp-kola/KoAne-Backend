@@ -17,7 +17,7 @@ exports.msg_get_all_messages = (req, res, next) => {
             });
         });
 }
-
+/*
 exports.msg_get_unread_messages = (req, res, next) => {
     //const receiverId = req.params.userId
     //Message.find({ receiver: receiverId })
@@ -53,7 +53,7 @@ exports.msg_get_read_messages = (req, res, next) => {
             });
         });
 }
-
+*/
 exports.msg_create_message = (p1,p2,p3) => {
     //const senderId = req.params.userId
     //const receiverId = req.params.userId
