@@ -37,6 +37,15 @@ const vendorSchema = new mongoose.Schema({
         required: [true, 'Last name is required'],
         trim: true,
     },
+<<<<<<< HEAD
+=======
+    // CompanyName: {
+    //     type: String,
+    //     required: [true, 'company name is required'],
+    //     trim: true,
+    //     unique: true,
+    // },
+>>>>>>> 23fd4316446c087dc2bcada7b388c624a1b52b80
     contactNo: {
         type: Number,
         required: [true, 'contact number is required'],
