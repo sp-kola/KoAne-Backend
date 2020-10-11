@@ -131,7 +131,19 @@ vendorSchema.methods = {
     toJSON() {
         return {
             _id: this._id,
-            userName: this.userName,
+            userID: this.userName,
+            email: this.email,
+            firstName: this.firstName,
+            lastName: this.lastName,
+            contactNo: this.contactNo,
+            vehicleNo: this.vehicleNo,
+            visitingDates: this.visitingDates,
+            vistingPlaces: this.viitingPlaces,
+            nic: this.nic,
+            businessName: this.businessName,
+            businessAddress: this.businessAddress,
+            bio: this.bio,
+            delivering: this.delivering
             //token: `JWT ${this.createToken()}`,
         };
     },

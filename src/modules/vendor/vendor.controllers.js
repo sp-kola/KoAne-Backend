@@ -30,8 +30,8 @@ export function login(req, res, next) {
 }
 
 export async function getVendorById(req, res) {
-    _id = req.Vendor._id;
-    const vendor = await Vendor.findById(_id);
+    //_id = req.Vendor._id;
+    const vendor = await Vendor.findOne({email: req.user.email})
     if (!vendor) {
         res.status(500).json(e);
     }
