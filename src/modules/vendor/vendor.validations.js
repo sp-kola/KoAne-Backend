@@ -12,7 +12,8 @@ const signup_Schema = Joi.object({
     nic:Joi.string().required(),
     businessName: Joi.string().required(),
     businessAddress: Joi.string().required()
-});
+}
+);
 
 export default {
     signup_Schema

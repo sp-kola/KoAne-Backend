@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import Vendor from './vendor.model';
 import User from '../user/user.model';
 import e from 'express';
@@ -13,10 +14,20 @@ export async function signUp(req, res) {
         const user = await User.create(data);
         await user.createToken();
 
-        const vendor = await Vendor.create({
-            ...req.body,
+        const vendorData = {
+            email: req.body.email,
+            userName: req.body.userName,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            contactNo: req.body.contactNo,
+            nic: req.body.nic,
+            businessName: req.body.businessName,
+            businessAddress: req.body.businessAddress,
             userID: user._id
-        });
+        };
+
+        const vendor = await Vendor.create(vendorData);
+        //await vendor.save();
         return res.status(201).json(vendor);
     }
     catch (e) {
@@ -29,9 +40,9 @@ export function login(req, res, next) {
     return next();
 }
 
-export async function getVendorById(req, res) {
-    _id = req.Vendor._id;
-    const vendor = await Vendor.findById(_id);
+export async function getVendorByName(req, res) {
+    console.log(req.body.businessName);
+    const vendor = await Vendor.findOne({ businessName: req.body.businessName });
     if (!vendor) {
         res.status(500).json(e);
     }
@@ -41,7 +52,7 @@ export async function getVendorById(req, res) {
 
 }
 
-export async function getAllVendors() {
+export async function getAllVendors(req, res) {
     Vendor.find({}, function (err, vendor) {
         if (err) {
             res.send(err);
@@ -53,16 +64,48 @@ export async function getAllVendors() {
 }
 
 export async function updateVendor() {
-    Vendor.findByIdAndUpdate(req.body.id, req.body, { new: true }, function (err, payment) {
-        if (err)
-            res.send(err);
-        res.json(payment);
-    });
+    const vendor = await Vendor.findOne({ email: req.user.email });
+    const updates = Object.keys(req.body);
+    const allowedUpdates = ['firstName', 'lastName', 'password', 'email', 'contactNo', 'userName', 'nic', 'businessName', 'businessAddress', 'vehicleNo', 'bio', 'delivering', 'visitingDates', 'visitingPlaces'];
+    const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
+
+    if (!isValidOperation) {
+        return res.status(400).send({ error: 'Invalid updates' });
+    }
+
+    try {
+        //update the user data
+        console.log('updating user', req.body.updateUser); if (req.body.email) {
+            req.user.email = req.body.email;
+        }
+        if (req.body.userName) {
+            req.user.userName = req.body.userName;
+        }
+        if (req.body.password) {
+            req.user.password = req.body.password;
+        }
+        await req.user.save();
+
+        await console.log('updated user: ', req.user);
+        //update the customer data
+
+    } catch (e) {
+        res.status(400).send(e);
+    }
 
 }
 
 export async function deleteVendor() {
-
+    const _id = req.user._id;
+    const vendor = await Vendor.findOne({ email: req.user.email });
+    try {
+        await req.user.remove();
+        await vendor.remove();
+        res.status(200).send(`account holder with ${req.user.userName} userName (${vendor.firstName} ${vendor.lastName}) account is deleted`);
+    }
+    catch (e) {
+        res.status(500).send();
+    }
 }
 
 export async function profilePic(req, res) {
