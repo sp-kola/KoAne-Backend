@@ -1,5 +1,5 @@
 const Message = require('./message.model');
-
+const User = require('./../user/user.model');
 
 exports.msg_get_all_messages = (req, res, next) => {
     //const receiverId = req.params.userId
@@ -17,61 +17,29 @@ exports.msg_get_all_messages = (req, res, next) => {
             });
         });
 }
-/*
-exports.msg_get_unread_messages = (req, res, next) => {
-    //const receiverId = req.params.userId
-    //Message.find({ receiver: receiverId })
-    Message.find({"read":false})
-        .exec()
-        .then(docs => {
 
-            console.log(docs);
-            res.json(docs);
-        })
-        .catch(err => {
-            console.log(err);
-            res.json({
-                error: err
-            });
-        });
-}
-
-exports.msg_get_read_messages = (req, res, next) => {
-    //const receiverId = req.params.userId
-    //Message.find({ receiver: receiverId })
-    Message.find({ "read": true })
-        .exec()
-        .then(docs => {
-
-            console.log(docs);
-            res.json(docs);
-        })
-        .catch(err => {
-            console.log(err);
-            res.json({
-                error: err
-            });
-        });
-}
-*/
-exports.msg_create_message = (p1,p2,p3) => {
+exports.msg_create_message = (req,res,pnext3) => {
     //const senderId = req.params.userId
     //const receiverId = req.params.userId
     const message = new Message({
-        sender: p1,
+        //sender: p1,
         //receiver: receiverId,
-        receiver: p2,
-        message: p3,
-        read: false
+       /* receiver: p2,
+        message: p3,*/
+        sender:req.body.sender,
+        receiver:req.body.receiver,
+        message : req.body.message,
+        read: false,
+        state: 0,
     });
     message
         .save()
         .then(result => {
             console.log(result);
             console.log('Message Send!');
-           /* res.json({
+            res.json({
                 message: 'Message Send!'
-            });*/
+            });
         })
         .catch(err => {
             console.log(err);
@@ -84,12 +52,20 @@ exports.msg_create_message = (p1,p2,p3) => {
 
 
 exports.msg_get_message = (req, res, next) => {
-    const id = req.params.msgId;
-    Message.findById(id)
+    const user_id = req.params.msgId;
+
+    Message.find({receiver:user_id})
         .exec()
         .then(result => {
             console.log("From database", result);
             res.json(result);
+            const senderUsername = result.sender;
+
+            User.find({_id:senderUsername})
+            .exec()
+            .then(res =>{
+                senderUsername = res.userName;
+            })
             if (result.read == false) {
                 Message.update({ _id: id }, { $set: { read: true } })
                     .exec()
@@ -127,36 +103,20 @@ exports.msg_set_read = (req, res, next) => {
 
 exports.msg_delete_message = (req, res, next) => {
     const id = req.params.msgId;
-    Message.findById(id)
+    const updateState = { state: 1 }
+
+    Message.update({ _id: id }, { $set: updateState })
         .exec()
         .then(result => {
-            if (result.read == true) {
-                Message.remove({ _id: id })
-                    .exec()
-                    .then(result => {
-                        console.log(result);
-                        res.json({
-                            message: 'Deleted the message!'
-                        });
-                    })
-                    .catch(err => {
-                        console.log(err);
-                        res.json({
-                            error: err
-                        })
-                    });
-            } else {
-                res.json({
-                        message: 'Please read the message'
-
-                    })
-                    //redirect to msg_get_message method
-            }
+            console.log(result);
+            res.json({
+                message: 'Message Deleted!'
+            });
         })
         .catch(err => {
             console.log(err);
             res.json({
                 error: err
             });
-        })
+        });
 }
