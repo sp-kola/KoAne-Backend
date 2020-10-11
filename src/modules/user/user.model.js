@@ -28,6 +28,9 @@ const userSchema = new mongoose.Schema({
     avatar: {
         type: Buffer
     },
+    profilePic: {
+        type: []
+    },
     password: {
         type: String,
         required: [true, 'Password is required'],
@@ -58,6 +61,12 @@ userSchema.virtual('vendors',{
 
 userSchema.virtual('customers',{
     ref: 'Customer',
+    localField: '_id',
+    foreignField: 'userID'
+})
+
+userSchema.virtual('admins',{
+    ref: 'Admin',
     localField: '_id',
     foreignField: 'userID'
 })
