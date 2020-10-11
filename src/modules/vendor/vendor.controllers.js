@@ -52,7 +52,7 @@ export async function getVendorByName(req, res) {
 
 }
 
-export async function getAllVendors() {
+export async function getAllVendors(req, res) {
     Vendor.find({}, function (err, vendor) {
         if (err) {
             res.send(err);
