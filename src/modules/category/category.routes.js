@@ -32,9 +32,39 @@ categoryRoutes.post('/add', async (req,res) => {
 });
 
 // select category by id
+categoryRoutes.get('/get/:id', async (req,res) => {
+    try{
+        const _id = req.params.id;
+        const category = await Category.findById(_id);
+        res.json(category);
+    }
+    catch(err){
+        res.json({message: err});
+    }   
+});
 
 // update category by id
+categoryRoutes.patch('/update/:id', async (req,res) =>{
+    try {
+        const updatedCat = await Category.updateOne({_id: req.params.id}, 
+            { $set: {   
+                        CategoryName : req.body.productName
+                    }
+        });
+        res.json(updatedCat);
+    }catch(err){
+        res.json({message: err});
+    }
+});
 
 // delete category by id
+categoryRoutes.delete('/delete/:id', async(req,res) => {
+    try{
+        const remCat = await Category.remove({_id: req.params.id});
+        res.json(remCat);
+    }catch(err){
+        res.json({message: err});
+    }
+});
 
 export default categoryRoutes;
