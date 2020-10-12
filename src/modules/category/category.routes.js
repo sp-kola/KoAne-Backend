@@ -1,10 +1,14 @@
 import {Router} from 'express';
+const bodyParser = require('body-parser');
 const Category = require('./category.model');
 
 const categoryRoutes = new Router();
 
+categoryRoutes.use(bodyParser.urlencoded({
+    extended: true
+  }));
 // View all categories
-categoryRoutes.get('/categories', async(req,res) => {
+categoryRoutes.get('/', async(req,res) => {
     try {
         const categories = await Category.find();
         res.json(categories);
@@ -14,10 +18,11 @@ categoryRoutes.get('/categories', async(req,res) => {
 });
 
 // Create new category
-categoryRoutes.post('/newCategory', async (req,res) => {
+categoryRoutes.post('/add', async (req,res) => {
+    // console.log(req.body);
+    // req empty
     const category = new Category({
-        categoryName: req.body.categoryName,
-        subCategories: req.body.subCategories
+        categoryName: req.body.categoryName
     });
     category.save().then( data => {
         res.json(data);
@@ -32,3 +37,4 @@ categoryRoutes.post('/newCategory', async (req,res) => {
 
 // delete category by id
 
+export default categoryRoutes;

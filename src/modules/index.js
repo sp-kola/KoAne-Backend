@@ -7,6 +7,7 @@ import orderRoutes from './order/order.routes';
 import productRoutes from './product/product.routes';
 import AdminRoutes from './admin/admin.routes';
 import messageRoutes from './message/message.routes';
+import categoryRoutes from './category/category.routes';
 import { authJwt } from '../services/auth.services';
 
 export default app => {
@@ -28,4 +29,5 @@ export default app => {
     app.use('/order', orderRoutes);
     app.use('/admin', AdminRoutes);
     app.use('/message', messageRoutes);
+    app.use('/category', categoryRoutes);
 };
