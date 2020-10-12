@@ -62,7 +62,7 @@ export async function updateVendor() {
 }
 
 export async function deleteVendor() {
-
+    
 }
 
 export async function profilePic(req, res) {
@@ -95,4 +95,20 @@ export async function getProfilePic(req, res) {
         res.status(404).send();
     }
 
+}
+
+//getCount
+export async function getCount(req, res) {
+    Vendor.count()
+        .exec()
+        .then(count => {
+            var data = count.toString()
+            return res.status(200).send(data)
+        })
+        .catch(err => {
+            console.log(err);
+            res.json({
+                error: err
+            });
+        });
 }

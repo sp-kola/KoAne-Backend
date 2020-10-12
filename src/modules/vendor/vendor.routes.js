@@ -30,8 +30,12 @@ routes.post('/avatar', authJwt, upload.single('upload'), vendorController.profil
     res.status(400).send({ error: error.message });
 });
 
+routes.delete('/', authJwt, vendorController.deleteVendor);
+
 routes.delete('/avatar', authJwt, vendorController.deleteProfilePic);
 
 routes.get('/avatar/:id', vendorController.getProfilePic);
+
+routes.get('/count', vendorController.getCount);
 
 export default routes;

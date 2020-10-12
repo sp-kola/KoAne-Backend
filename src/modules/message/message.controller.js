@@ -18,7 +18,7 @@ exports.msg_get_all_messages = (req, res, next) => {
         });
 }
 
-exports.msg_create_message = (req,res,pnext3) => {
+exports.msg_create_message = (req,res,next) => {
     //const senderId = req.params.userId
     //const receiverId = req.params.userId
     const message = new Message({
