@@ -54,7 +54,7 @@ productRoutes.get('/getproduct/:name', async (req,res) => {
         const findname = req.params.name;
         // console.log(findname);
         const objs = await Product.find({productName:{ $regex:'.*'+findname+'.*'} });
-        console.log(objs)
+        console.log(objs);
         res.json(objs);
     } catch (error) {
         res.json({message: error});        
