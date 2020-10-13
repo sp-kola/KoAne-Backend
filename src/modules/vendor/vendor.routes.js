@@ -24,7 +24,6 @@ routes.post('/signup', celebrate({
 
 //routes.post('/login', authLocal, vendorController.login);
 
-routes.get('/vendor', authJwt, vendorController.getVendorById);
 
 routes.post('/avatar', authJwt, upload.single('upload'), vendorController.profilePic, (error, req, res, next) => {
     res.status(400).send({ error: error.message });
@@ -33,5 +32,17 @@ routes.post('/avatar', authJwt, upload.single('upload'), vendorController.profil
 routes.delete('/avatar', authJwt, vendorController.deleteProfilePic);
 
 routes.get('/avatar/:id', vendorController.getProfilePic);
+
+routes.get('/allVendors', authJwt, vendorController.getAllVendors);
+
+routes.get('/vendorbyName', authJwt, vendorController.getVendorByName);
+
+routes.get('/vendor', authJwt, vendorController.getVendorById);
+
+routes.get('/search/:id', authJwt, vendorController.searchById);
+
+routes.patch('/', authJwt, vendorController.updateVendor);
+
+routes.delete('/', authJwt, vendorController.deleteVendor);
 
 export default routes;

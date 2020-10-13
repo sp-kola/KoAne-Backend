@@ -55,7 +55,7 @@ const vendorSchema = new mongoose.Schema({
     visitingDates: {
         type: []
     },
-    viitingPlaces: {
+    visitingPlaces: {
         type: []
     },
     nic: {
@@ -76,6 +76,12 @@ const vendorSchema = new mongoose.Schema({
     delivering: {
         type: Boolean,
         default: false
+    },
+    startTime: {
+        type: String
+    },
+    endTime: {
+        type: String
     }
 
     // password: {
@@ -138,12 +144,14 @@ vendorSchema.methods = {
             contactNo: this.contactNo,
             vehicleNo: this.vehicleNo,
             visitingDates: this.visitingDates,
-            vistingPlaces: this.viitingPlaces,
+            visitingPlaces: this.visitingPlaces,
             nic: this.nic,
             businessName: this.businessName,
             businessAddress: this.businessAddress,
             bio: this.bio,
-            delivering: this.delivering
+            delivering: this.delivering,
+            startTime : this.startTime,
+            endTime: this.endTime
             //token: `JWT ${this.createToken()}`,
         };
     },

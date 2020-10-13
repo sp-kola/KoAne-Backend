@@ -1,16 +1,15 @@
 import { authLocal, authJwt } from '../../services/auth.services';
-import routes from '../location/location.routes';
 const express = require('express')
 const Order = require('./order.model')
 const router = new express.Router()
 const Customer = require('../customer/customer.model')
 const Vendor = require('../vendor/vendor.model')
 
-router.post('/create',authJwt, async(req,res) => {
+router.post('/',authJwt,async(req,res) => {
     const data = {
         products : req.body.products,
         description: req.body.description,
-        completed: 'NC', //not complete
+        completed: 'P', //not complete
         customer: req.user._id,
         vendor: req.body.vendor,
         position:[
@@ -18,12 +17,14 @@ router.post('/create',authJwt, async(req,res) => {
             req.body.longitude,
         ],
         date: req.body.date,
+        price: req.body.price
     }
 
-    const order = new Order(req.body)
+    const order = new Order(data)
     try{
-        await order.save()
-        res.status(201).send(order)
+        const temp = await order.save()
+        console.log('created order ',temp)
+        res.status(201).send(temp)
     }catch(e){
         res.status(400).send(e)
     }    
@@ -32,7 +33,7 @@ router.post('/create',authJwt, async(req,res) => {
 router.get('/customerOrders',authJwt,async(req,res) => {
     const id = req.user._id
     try{
-        const orders = await Order.find({customer: id})
+        var orders = await Order.find({customer: id})
         res.status(200).send(orders)
     }catch(e){
         res.status(500).send(e)
@@ -130,6 +131,7 @@ router.delete('/delete/:id',authJwt,async(req,res) => {
         if(!order){
             return res.status(404).send()
         }
+        await order.remove()
         res.status(200).send(order)
 
     }catch(e){
@@ -140,4 +142,4 @@ router.delete('/delete/:id',authJwt,async(req,res) => {
 
 })
 
-export default routes;
+export default router;

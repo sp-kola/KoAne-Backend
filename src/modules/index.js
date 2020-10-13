@@ -21,11 +21,12 @@ export default app => {
         console.log(req)
         res.send('this is a private route');
     });
+    app.use('/order', orderRoutes);
+    app.use('/admin', AdminRoutes);
+    app.use('/message', messageRoutes);
     app.use('/location',(req,res,next)=> {
         req.io = io
         next()
     }, locationRoutes);
-    app.use('/order', orderRoutes);
-    app.use('/admin', AdminRoutes);
-    app.use('/message', messageRoutes);
+    
 };

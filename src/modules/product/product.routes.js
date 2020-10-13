@@ -67,18 +67,19 @@ productRoutes.get('/vendorProducts/:id', async(req,res) => {
 
     try{
         const products = await Product.find({vendor: req.params.id});
+        console.log('PRODUCTS ',products)
         //method 2
-        const vendor = await Vendor.findById(req.params.id);
-        // console.log(vendor);
-        await vendor.populate({
-            path: 'products',
-            //match,
-            // options: {
-            //     limit : parseInt(req.query.limit),
-            //     skip : parseInt(req.query.skip),
-            //     sort 
-            // }
-        }).execPopulate();
+        // const vendor = await Vendor.findById(req.params.id);
+        // // console.log(vendor);
+        // await vendor.populate({
+        //     path: 'products',
+        //     //match,
+        //     // options: {
+        //     //     limit : parseInt(req.query.limit),
+        //     //     skip : parseInt(req.query.skip),
+        //     //     sort 
+        //     // }
+        // }).execPopulate();
         res.status(200).send(products);
     }catch(e){
         res.status(500).send(e);
