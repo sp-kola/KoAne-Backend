@@ -17,6 +17,10 @@ const messageSchema = new Schema({
     read: {
         type: Boolean,
         required: true
+    },
+    state: {
+        type: Number,
+        required: true
     }
 });
 

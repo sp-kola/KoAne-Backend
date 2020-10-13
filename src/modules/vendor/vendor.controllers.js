@@ -171,3 +171,19 @@ export async function getProfilePic(req, res) {
     }
 
 }
+
+//getCount
+export async function getCount(req, res) {
+    Vendor.count()
+        .exec()
+        .then(count => {
+            var data = count.toString()
+            return res.status(200).send(data)
+        })
+        .catch(err => {
+            console.log(err);
+            res.json({
+                error: err
+            });
+        });
+}
