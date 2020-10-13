@@ -85,7 +85,8 @@ export async function updateCustomer(req,res){
 
 //delete
 export async function deleteCustomer(req,res) {
-    const _id = req.user._id
+    console.log(req.usermail)
+    const email = req.user.email
     const customer = await Customer.findOne({email: req.user.email})
     try{
         await req.user.remove()
