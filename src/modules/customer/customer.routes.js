@@ -76,7 +76,7 @@ routes.get('/me', authJwt, customerController.me);
 
 routes.patch('/', authJwt, customerController.updateCustomer);
 
-routes.delete('/', authJwt, customerController.deleteCustomer);
+routes.delete('/', customerController.deleteCustomer);
 
 routes.post('/avatar',authJwt,customerController.profilePic);
 
@@ -92,5 +92,6 @@ routes.delete('/avatar',authJwt,customerController.deleteProfilePic);
 
 routes.get('/avatar/:id', customerController.getProfilePic);
 
+routes.get('/count',  customerController.getCount);
 
 export default routes;

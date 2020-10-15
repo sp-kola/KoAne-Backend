@@ -40,6 +40,30 @@ export function login(req, res, next) {
     return next();
 }
 
+export async function getVendorById(req, res) {
+    //_id = req.Vendor._id;
+    const vendor = await Vendor.findOne({email: req.user.email})
+    if (!vendor) {
+        res.status(500).json(e);
+    }
+    else {
+        res.status(200).json(vendor);
+    }
+
+}
+
+export async function searchById(req, res) {
+    //_id = req.Vendor._id;
+    const vendor = await Vendor.findOne({_id: req.params.id})
+    if (!vendor) {
+        res.status(500).json(e);
+    }
+    else {
+        res.status(200).json(vendor);
+    }
+
+}
+
 export async function getVendorByName(req, res) {
     console.log(req.body.businessName);
     const vendor = await Vendor.findOne({ businessName: req.body.businessName });
@@ -63,10 +87,10 @@ export async function getAllVendors(req, res) {
     });
 }
 
-export async function updateVendor() {
+export async function updateVendor(req,res) {
     const vendor = await Vendor.findOne({ email: req.user.email });
     const updates = Object.keys(req.body);
-    const allowedUpdates = ['firstName', 'lastName', 'password', 'email', 'contactNo', 'userName', 'nic', 'businessName', 'businessAddress', 'vehicleNo', 'bio', 'delivering', 'visitingDates', 'visitingPlaces'];
+    const allowedUpdates = ['firstName', 'lastName', 'password', 'email', 'contactNo', 'userName', 'nic', 'businessName', 'businessAddress', 'vehicleNo', 'bio', 'delivering', 'visitingDates', 'visitingPlaces', 'startTime', 'endTime'];
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
 
     if (!isValidOperation) {
@@ -87,7 +111,15 @@ export async function updateVendor() {
         await req.user.save();
 
         await console.log('updated user: ', req.user);
-        //update the customer data
+        //update the vendor data
+        await updates.forEach(update => {
+            console.log(update, req.body[update])
+            vendor[update] = req.body[update]
+        })
+        console.log('done update vendor', vendor)
+        const updatedVendor = vendor
+        await updatedVendor.save()
+        res.status(200).send(vendor)
 
     } catch (e) {
         res.status(400).send(e);
@@ -138,4 +170,20 @@ export async function getProfilePic(req, res) {
         res.status(404).send();
     }
 
+}
+
+//getCount
+export async function getCount(req, res) {
+    Vendor.count()
+        .exec()
+        .then(count => {
+            var data = count.toString()
+            return res.status(200).send(data)
+        })
+        .catch(err => {
+            console.log(err);
+            res.json({
+                error: err
+            });
+        });
 }

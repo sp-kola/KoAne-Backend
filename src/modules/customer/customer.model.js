@@ -52,10 +52,10 @@ const customerSchema = new mongoose.Schema({
     //     type: mongoose.Schema.Types.ObjectId,
     //     ref: 'Location'
     // },
-    deliveryAddresses: [{
-        name: String,
-        position: []
-    }]
+    // deliveryAddresses: [{
+    //     name: String,
+    //     position: []
+    // }]
 }
 );
 

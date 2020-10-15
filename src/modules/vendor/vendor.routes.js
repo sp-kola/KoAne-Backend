@@ -29,6 +29,8 @@ routes.post('/avatar', authJwt, upload.single('upload'), vendorController.profil
     res.status(400).send({ error: error.message });
 });
 
+routes.delete('/', vendorController.deleteVendor);
+
 routes.delete('/avatar', authJwt, vendorController.deleteProfilePic);
 
 routes.get('/avatar/:id', vendorController.getProfilePic);
@@ -36,6 +38,10 @@ routes.get('/avatar/:id', vendorController.getProfilePic);
 routes.get('/allVendors', authJwt, vendorController.getAllVendors);
 
 routes.get('/vendorbyName', authJwt, vendorController.getVendorByName);
+
+routes.get('/vendor', authJwt, vendorController.getVendorById);
+
+routes.get('/search/:id', authJwt, vendorController.searchById);
 
 routes.patch('/', authJwt, vendorController.updateVendor);
 
