@@ -20,10 +20,6 @@ const productSchema = new mongoose.Schema({
         type: [String],
         // required: [true, 'At least one category is required']
     },
-    image: {
-        data: Buffer,
-        ContentType: String 
-    },
     createdAt: {
         type: Date,
         default: Date.now

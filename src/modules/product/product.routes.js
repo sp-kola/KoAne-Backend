@@ -18,7 +18,7 @@ productRoutes.get('/', async (req,res) => {
 });
 
 // create a new product
-productRoutes.post('/create',upload.single('productImage.png'), (req,res)=>{
+productRoutes.post('/create', (req,res)=>{
     // console.log(req.file);
     
     const product = new Product({
@@ -27,7 +27,6 @@ productRoutes.post('/create',upload.single('productImage.png'), (req,res)=>{
         details: req.body.details,
         category: req.body.category,
         vendor: req.body.vendor,
-        image: req.file 
     });
     product.save().then( data => {
         res.json(data);
