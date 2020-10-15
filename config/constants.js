@@ -8,7 +8,8 @@ const testConfig = {
 };
 
 const prodConfig = {
-    MONGO_URL: 'mongodb://localhost/mydb-prod',
+    MONGO_URL: 'mongodb+srv://koAne:sp-kola@cluster0.2lii3.mongodb.net/mydb-prod?retryWrites=true&w=majority',
+    JWT_SECRET: 'thisisasecret',
 };
 
 const defaultConfig = {
@@ -16,6 +17,7 @@ const defaultConfig = {
 };
 
 function envConfig(env) {
+    console.log(env)
     switch (env) {
         case 'development':
             return devConfig;
